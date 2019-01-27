@@ -7,4 +7,4 @@ OBJ = intro.c
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 intro: $(OBJ)
-	$(CC) -g -o $@ $^ $(CFLAGS) intro -pthread -lrt
+	$(CC) -g -o $@ $^ $(CFLAGS) -pthread -lrt

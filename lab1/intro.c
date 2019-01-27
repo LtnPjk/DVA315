@@ -4,18 +4,22 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-void * hellomoon(void * u){
-    while(1){
-    printf("Hello moon!\n");
+void * hellomoon(void* u){
+    for(int k = 0; k < 10; k++){
+    printf("%s", (char*)u);
     usleep(200000);
     }
 }
 
 int main(){
     pthread_t tid;
-    pthread_create(&tid, NULL, hellomoon, NULL);
-    for(int i = 0; i < 10; i++){
-        printf("Hello world!\n");
-        sleep(1);
+    char * word = "Hello Moon!\n";
+    while(1){
+        for(int i = 0; i < 10; i++){
+            printf("Hello World!\n");
+            sleep(1);
+        }
+        pthread_create(&tid, NULL, &hellomoon, word);
+        pthread_join(tid, NULL);
     }
 }
