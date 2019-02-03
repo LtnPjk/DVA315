@@ -36,4 +36,5 @@ int main(){
         pthread_mutex_unlock(&lock);
         usleep(1000);
     }
+
 }
