@@ -7,7 +7,7 @@
 #include <string.h>
 #include <errno.h>
 
-#define QUEUE_NAME "/MQ"
+#define QUEUE_NAME "/mq"
 #define MAX_SIZE    1024
 #define STOP       "END"
 
@@ -30,7 +30,7 @@ void * producer(void * u){
     mq = mq_open(QUEUE_NAME, O_CREAT | O_RDONLY, 0644, &attr);
     while(1){
         mq_receive(mq, msg, MAX_SIZE, NULL);
-        //printf("%s\n", msg);
+        printf("%s\n", msg);
         if(strcmp(msg, "END\n") == 0){
             return 0;
         }

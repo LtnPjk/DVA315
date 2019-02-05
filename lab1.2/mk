@@ -1,0 +1,10 @@
+CC=gcc
+CFLAGS=-I.
+DEPS = wrapper.h
+OBJ = intro2.c
+
+%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+4b: $(OBJ)
+	$(CC) -g -o $@ $^ $(CFLAGS) -pthread -lrt
