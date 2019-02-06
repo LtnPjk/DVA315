@@ -55,7 +55,7 @@ int MQwrite (mqd_t * mq, void * sendBuffer)
     /* Write a msg to a mailslot, return nr Uses mq as reference pointer, so that you can 	     reach the handle from anywhere*/
     /* of successful bytes written         */
     int retVal;
-    retVal = mq_send(*mq, (const char *) sendBuffer, MAX_SIZE + 1, 0);
+    retVal = mq_send(*mq, (const char *) sendBuffer, sizeof(struct pt), 0);
     if(retVal == -1){
         retVal = 0;
     }

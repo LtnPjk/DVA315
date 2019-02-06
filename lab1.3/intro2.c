@@ -7,7 +7,7 @@
 #include <string.h>
 #include <errno.h>
 #include <sys/stat.h>
-#include "wrapper.c"
+
 //test comment
 #define QUEUE_NAME "/mq3" //name "MQ" does not work
 #define MAX_SIZE 1024
