@@ -1,3 +1,3 @@
-/home/felixs/Documents/DVA315/lab1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/felixs/Documents/DVA315/lab1/cmake-build-debug/CMakeFiles/lab1.dir
-/home/felixs/Documents/DVA315/lab1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/felix/CLionProjects/DVA315/lab1.3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/felix/CLionProjects/DVA315/lab1.3/cmake-build-debug/CMakeFiles/lab1.dir
+/home/felix/CLionProjects/DVA315/lab1.3/cmake-build-debug/CMakeFiles/edit_cache.dir

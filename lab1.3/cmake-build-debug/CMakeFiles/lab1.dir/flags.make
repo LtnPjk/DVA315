@@ -6,5 +6,5 @@ C_FLAGS =  -pthread -lpthread -lrt -g   -std=gnu99
 
 C_DEFINES = 
 
-C_INCLUDES = -I/home/felixs/Documents/DVA315/lab1/. 
+C_INCLUDES = -I/home/felix/CLionProjects/DVA315/lab1.3/. 
 

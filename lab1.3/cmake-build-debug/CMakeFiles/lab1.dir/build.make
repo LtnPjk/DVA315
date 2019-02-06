@@ -34,19 +34,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/felixs/Downloads/clion-2018.3.3/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /snap/clion/61/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /home/felixs/Downloads/clion-2018.3.3/bin/cmake/linux/bin/cmake -E remove -f
+RM = /snap/clion/61/bin/cmake/linux/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/felixs/Documents/DVA315/lab1
+CMAKE_SOURCE_DIR = /home/felix/CLionProjects/DVA315/lab1.3
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/felixs/Documents/DVA315/lab1/cmake-build-debug
+CMAKE_BINARY_DIR = /home/felix/CLionProjects/DVA315/lab1.3/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/lab1.dir/depend.make
@@ -59,29 +59,29 @@ include CMakeFiles/lab1.dir/flags.make
 
 CMakeFiles/lab1.dir/wrapper.c.o: CMakeFiles/lab1.dir/flags.make
 CMakeFiles/lab1.dir/wrapper.c.o: ../wrapper.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/felixs/Documents/DVA315/lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/lab1.dir/wrapper.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/lab1.dir/wrapper.c.o   -c /home/felixs/Documents/DVA315/lab1/wrapper.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/felix/CLionProjects/DVA315/lab1.3/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/lab1.dir/wrapper.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/lab1.dir/wrapper.c.o   -c /home/felix/CLionProjects/DVA315/lab1.3/wrapper.c
 
 CMakeFiles/lab1.dir/wrapper.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/lab1.dir/wrapper.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/felixs/Documents/DVA315/lab1/wrapper.c > CMakeFiles/lab1.dir/wrapper.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/felix/CLionProjects/DVA315/lab1.3/wrapper.c > CMakeFiles/lab1.dir/wrapper.c.i
 
 CMakeFiles/lab1.dir/wrapper.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/lab1.dir/wrapper.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/felixs/Documents/DVA315/lab1/wrapper.c -o CMakeFiles/lab1.dir/wrapper.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/felix/CLionProjects/DVA315/lab1.3/wrapper.c -o CMakeFiles/lab1.dir/wrapper.c.s
 
 CMakeFiles/lab1.dir/intro2.c.o: CMakeFiles/lab1.dir/flags.make
 CMakeFiles/lab1.dir/intro2.c.o: ../intro2.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/felixs/Documents/DVA315/lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/lab1.dir/intro2.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/lab1.dir/intro2.c.o   -c /home/felixs/Documents/DVA315/lab1/intro2.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/felix/CLionProjects/DVA315/lab1.3/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/lab1.dir/intro2.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/lab1.dir/intro2.c.o   -c /home/felix/CLionProjects/DVA315/lab1.3/intro2.c
 
 CMakeFiles/lab1.dir/intro2.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/lab1.dir/intro2.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/felixs/Documents/DVA315/lab1/intro2.c > CMakeFiles/lab1.dir/intro2.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/felix/CLionProjects/DVA315/lab1.3/intro2.c > CMakeFiles/lab1.dir/intro2.c.i
 
 CMakeFiles/lab1.dir/intro2.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/lab1.dir/intro2.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/felixs/Documents/DVA315/lab1/intro2.c -o CMakeFiles/lab1.dir/intro2.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/felix/CLionProjects/DVA315/lab1.3/intro2.c -o CMakeFiles/lab1.dir/intro2.c.s
 
 # Object files for target lab1
 lab1_OBJECTS = \
@@ -95,7 +95,7 @@ lab1: CMakeFiles/lab1.dir/wrapper.c.o
 lab1: CMakeFiles/lab1.dir/intro2.c.o
 lab1: CMakeFiles/lab1.dir/build.make
 lab1: CMakeFiles/lab1.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/felixs/Documents/DVA315/lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable lab1"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/felix/CLionProjects/DVA315/lab1.3/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable lab1"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/lab1.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -108,6 +108,6 @@ CMakeFiles/lab1.dir/clean:
 .PHONY : CMakeFiles/lab1.dir/clean
 
 CMakeFiles/lab1.dir/depend:
-	cd /home/felixs/Documents/DVA315/lab1/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/felixs/Documents/DVA315/lab1 /home/felixs/Documents/DVA315/lab1 /home/felixs/Documents/DVA315/lab1/cmake-build-debug /home/felixs/Documents/DVA315/lab1/cmake-build-debug /home/felixs/Documents/DVA315/lab1/cmake-build-debug/CMakeFiles/lab1.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/felix/CLionProjects/DVA315/lab1.3/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/felix/CLionProjects/DVA315/lab1.3 /home/felix/CLionProjects/DVA315/lab1.3 /home/felix/CLionProjects/DVA315/lab1.3/cmake-build-debug /home/felix/CLionProjects/DVA315/lab1.3/cmake-build-debug /home/felix/CLionProjects/DVA315/lab1.3/cmake-build-debug/CMakeFiles/lab1.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/lab1.dir/depend
 
