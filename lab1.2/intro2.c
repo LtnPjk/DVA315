@@ -41,7 +41,7 @@ void * producer(void * u) {
             }
             printf("%s\n", input_buffer.string);
         }
-        printf("mutex_prod unlock: %d\n",pthread_mutex_unlock(&lock));
+        printf("mutex_prod unlock: %d\n", pthread_mutex_unlock(&lock));
         usleep(20);
     }
 }

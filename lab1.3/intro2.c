@@ -33,6 +33,7 @@ void * producer(void * u) {
     mqd_t mq;
     mq = mq_open(QUEUE_NAME, O_CREAT | O_NONBLOCK | O_RDONLY, 0666, &attr);
     printf("mq_created %d\n", mq);
+    pthread_mutex_unlock(&l1);
     struct inputs input_buffer;
     while (1) {
         //printf("mutex_prod lock: %d\n",pthread_mutex_lock(&l2));
@@ -55,13 +56,16 @@ int main(){
     pthread_mutex_init(&l1, NULL);
     pthread_mutex_init(&l2, NULL);
 
+    pthread_mutex_lock(&l1);
     pthread_mutex_lock(&l2);
     pthread_create(&prod, NULL, &producer, NULL);
     mqd_t mq;
     struct inputs input;
     //open mq
-    usleep(20);
+    //usleep(20);
+    pthread_mutex_lock(&l1);
     mq = mq_open(QUEUE_NAME, O_WRONLY, 0666, &attr);
+    pthread_mutex_unlock(&l1);
     while(1){
         //printf("mutex_main lock: %d\n",pthread_mutex_lock(&l1));
         pthread_mutex_lock(&l1);
