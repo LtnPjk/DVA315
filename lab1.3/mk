@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-I.
-DEPS = wrapper.h
+DEPS = wrapper.h wrapper.c
 OBJ = intro2.c
 
 %.o: %.c $(DEPS)

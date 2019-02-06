@@ -7,6 +7,7 @@
 #include <string.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include "wrapper.c"
 
 #define QUEUE_NAME "/mq3" //name "MQ" does not work
 #define MAX_SIZE 1024
@@ -16,34 +17,26 @@ pthread_mutex_t l2 = PTHREAD_MUTEX_INITIALIZER;
 
 pthread_t prod;
 
-struct mq_attr attr;
-struct inputs{
-    char string[MAX_SIZE];
-};
-
 void * producer(void * u) {
-    //Init queue attr
-    attr.mq_flags = 0;
-    attr.mq_maxmsg = 10;
-    attr.mq_msgsize = MAX_SIZE;
-    attr.mq_curmsgs = 0;
-
-    //Create mq
     printf("Starting mail client..\n");
+
     mqd_t mq;
-    mq = mq_open(QUEUE_NAME, O_CREAT | O_NONBLOCK | O_RDONLY, 0666, &attr);
+    planet_type msg;
+    //mq = mq_open(QUEUE_NAME, O_CREAT | O_NONBLOCK | O_RDONLY, 0666, &attr);
+    if (MQcreate(&mq, QUEUE_NAME) != 1){
+        printf("ERROR!\n");
+        return NULL;}
     printf("mq_created %d\n", mq);
     pthread_mutex_unlock(&l1);
-    struct inputs input_buffer;
     while (1) {
         //printf("mutex_prod lock: %d\n",pthread_mutex_lock(&l2));
         pthread_mutex_lock(&l2);
-        if (mq_receive(mq, (char *)&input_buffer, MAX_SIZE + 1, NULL) >= 0){
-            if(strcmp(input_buffer.string, "END")==0){
+        if (MQread(&mq, (void *)&msg) >= 0){
+            if(strcmp(msg.name, "END")==0){
                 mq_close(mq);
                 return 0;
             }
-            printf("%s\n", input_buffer.string);
+            printf("%s\n", msg.name);
         }
         //printf("mutex_prod unlock: %d\n",pthread_mutex_unlock(&l1));
         pthread_mutex_unlock(&l1);
@@ -60,24 +53,31 @@ int main(){
     pthread_mutex_lock(&l2);
     pthread_create(&prod, NULL, &producer, NULL);
     mqd_t mq;
-    struct inputs input;
+    planet_type msg;
     //open mq
     //usleep(20);
     pthread_mutex_lock(&l1);
-    mq = mq_open(QUEUE_NAME, O_WRONLY, 0666, &attr);
+    if (MQconnect(&mq, QUEUE_NAME) != 1){
+        printf("ERROR!\n");
+        return -1;
+    }
     pthread_mutex_unlock(&l1);
     while(1){
         //printf("mutex_main lock: %d\n",pthread_mutex_lock(&l1));
         pthread_mutex_lock(&l1);
-        scanf("%s", input.string);
+        scanf("%s", msg.name);
         //printf("mq_send: %d\n", mq_send(mq, (const char*)&input, sizeof(input), 0));
-        mq_send(mq, (const char*)&input, sizeof(input), 0);
+        MQwrite(&mq, (void *)&msg);
         //printf("mutex_main unlock: %d\n", pthread_mutex_unlock(&l2));
         pthread_mutex_unlock(&l2);
         usleep(20);
-        if(strcmp(input.string, "END") == 0){
-            mq_close(mq);
-            mq_unlink(QUEUE_NAME);
+        if(strcmp(msg.name, "END") == 0){
+            int retVal = MQclose(&mq, QUEUE_NAME);
+            if(retVal == 1){
+                printf("Mailslot closed successfully...\n");
+            }
+            else
+                printf("Mailslot NOT closed successfully!!\n");
             return 0;
         }
     }
