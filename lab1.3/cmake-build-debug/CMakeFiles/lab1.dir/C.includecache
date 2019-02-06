@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/felixs/Documents/DVA315/lab1/intro2.c
+wrapper.h
+/home/felixs/Documents/DVA315/lab1/wrapper.h
+unistd.h
+-
+stdio.h
+-
+stdlib.h
+-
+pthread.h
+-
+mqueue.h
+-
+string.h
+-
+errno.h
+-
+sys/stat.h
+-
+
+/home/felixs/Documents/DVA315/lab1/wrapper.h
+stdlib.h
+-
+stdio.h
+-
+string.h
+-
+sys/stat.h
+-
+sys/types.h
+-
+errno.h
+-
+mqueue.h
+-
+pthread.h
+-
+
