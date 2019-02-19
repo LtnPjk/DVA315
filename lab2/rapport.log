@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.2.17)  19 FEB 2019 12:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.2.17)  19 FEB 2019 15:43
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -428,7 +428,7 @@ Here is how much of TeX's memory you used:
 </usr/sha
 re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on rapport.pdf (1 page, 28549 bytes).
+Output written on rapport.pdf (1 page, 28756 bytes).
 PDF statistics:
  16 PDF objects out of 1000 (max. 8388607)
  10 compressed objects within 1 object stream

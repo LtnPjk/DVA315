@@ -1,0 +1,14 @@
+sudo apt-get install build-essential gnome-devel
+sudo apt-get install libcairo2-dev
+
+Compile with: (ONLY IF USING THE COMMANDLINE, if using eclipse or another IDE, follow the instructions in the pdf)
+gcc -I/usr/include/cairo/ -L/usr/lib -o screenshot server.c wrapper.c wrapper.h -pthread -lrt -lcairo `pkg-config --cflags --libs gtk+-3.0`
+
+Note that path to cairo may vary, in my case, cairo is located in /usr/include and /usr/lib
+However, the path may very well be /usr/local/include and /usr/local/lib depending on your setup
+You can use the following to locate the cairo libs:
+
+cd /usr
+find . -name "cairo.h"
+
+The makefile will not work for this project, since the cairo installation paths will be different 
