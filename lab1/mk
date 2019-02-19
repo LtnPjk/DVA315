@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-I.
 DEPS = wrapper.h
-OBJ = main.c
+OBJ = intro2.o wrapper.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)

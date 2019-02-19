@@ -1,0 +1,17 @@
+CC=gcc
+CFLAGS=-I.
+OBJ = main_old.o
+LIBS+=-pthread
+LIBS+=-lrt
+
+%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+app_old: $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+.PHONY: clean
+
+clean:
+	rm -f *.o app_old
+
