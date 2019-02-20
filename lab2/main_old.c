@@ -32,7 +32,7 @@ void printBuffer(){
     for(int i = 0; i < BUFFER_SIZE; i++){
         printf("%d  ", buffer[i]);
     }
-    printf("\n");
+    printf("            %d\n", counter);
 }
 
 void initializeData() {
@@ -67,12 +67,12 @@ void *producer(void *param) {
         item = count++;
 
         if(insert_item(item)) {
-            fprintf(stderr, " Producer %ld report error condition\n", (long) param);
+      //      fprintf(stderr, " Producer %ld report error condition\n", (long) param);
 	    fflush(stdout);
         }
 
         else {
-            printf("producer %ld produced %d\n", (long) param, item);
+        //    printf("producer %ld produced %d\n", (long) param, item);
         }
 	fflush(stdout);
 
@@ -87,15 +87,15 @@ void *consumer(void *param) {
     while(TRUE) {
         /* sleep for a random period of time */
         int rNum = rand() / RAND_DIVISOR;
-        sleep(rNum);
+        sleep(rNum*rNum);
 
         if(remove_item(&item)) {
-            fprintf(stderr, "Consumer %ld report error condition\n",(long) param);
-	    fflush(stdout);
+            //fprintf(stderr, "Consumer %ld report error condition\n",(long) param);
+	    //fflush(stdout);
         }
 
         else {
-            printf("consumer %ld consumed %d\n", (long) param, item);
+            //printf("consumer %ld consumed %d\n", (long) param, item);
         }
 
         printBuffer();
@@ -109,6 +109,8 @@ int insert_item(buffer_item item) {
 
     if(counter < BUFFER_SIZE) {
         buffer[counter] = item;
+        int rNum = rand() / RAND_DIVISOR;
+        usleep(rNum*rNum*1000);
         counter++;
         return 0;
     }
@@ -123,6 +125,8 @@ int remove_item(buffer_item *item) {
      and decrement the counter */
     if(counter > 0) {
         *item = buffer[(counter-1)];
+        int rNum = rand() / RAND_DIVISOR;
+        usleep(rNum*rNum*1000);
         counter--;
         return 0;
     }
@@ -140,8 +144,8 @@ int main(int argc, char *argv[]) {
     //}
 
     int mainSleepTime = 30;//atoi(argv[1]); /* Time in seconds for main to sleep */
-    int numProd = 2; //atoi(argv[2]); /* Number of producer threads */
-    int numCons = 4; //atoi(argv[3]); /* Number of consumer threads */
+    int numProd = 50; //atoi(argv[2]); /* Number of producer threads */
+    int numCons = 50; //atoi(argv[3]); /* Number of consumer threads */
 
     initializeData();
 

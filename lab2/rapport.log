@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.2.17)  19 FEB 2019 15:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.2.17)  19 FEB 2019 15:47
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -424,11 +424,11 @@ Here is how much of TeX's memory you used:
  4398 multiletter control sequences out of 15000+600000
  5150 words of font info for 19 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 24i,7n,32p,901b,199s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 24i,7n,32p,901b,197s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/sha
 re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on rapport.pdf (1 page, 28756 bytes).
+Output written on rapport.pdf (1 page, 28761 bytes).
 PDF statistics:
  16 PDF objects out of 1000 (max. 8388607)
  10 compressed objects within 1 object stream
