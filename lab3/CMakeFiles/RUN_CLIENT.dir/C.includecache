@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ltnpjk/Documents/Github/DVA315/Lab 3_newer/Lab 3/client.c
+wrapper.h
+/home/ltnpjk/Documents/Github/DVA315/Lab 3_newer/Lab 3/wrapper.h
+
+/home/ltnpjk/Documents/Github/DVA315/Lab 3_newer/Lab 3/wrapper.h
+stdlib.h
+-
+stdio.h
+-
+string.h
+-
+sys/stat.h
+-
+sys/types.h
+-
+errno.h
+-
+mqueue.h
+-
+pthread.h
+-
+

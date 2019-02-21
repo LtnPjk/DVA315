@@ -1,0 +1,1 @@
+/usr/bin/cc  -pthread -lpthread -lrt   CMakeFiles/RUN_CLIENT.dir/client.c.o  -o RUN_CLIENT -lrt 

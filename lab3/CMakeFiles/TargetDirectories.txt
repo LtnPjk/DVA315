@@ -1,0 +1,4 @@
+/home/ltnpjk/Documents/Github/DVA315/Lab 3_newer/Lab 3/CMakeFiles/edit_cache.dir
+/home/ltnpjk/Documents/Github/DVA315/Lab 3_newer/Lab 3/CMakeFiles/rebuild_cache.dir
+/home/ltnpjk/Documents/Github/DVA315/Lab 3_newer/Lab 3/CMakeFiles/RUN_SERVER.dir
+/home/ltnpjk/Documents/Github/DVA315/Lab 3_newer/Lab 3/CMakeFiles/RUN_CLIENT.dir

@@ -1,20 +1,17 @@
 #include <cairo.h>
 #include <gtk/gtk.h>
 #include <pthread.h>
-#include "wrapper.c"
-#include "wrapper.h"
+
 
 static void do_drawing(cairo_t *);
 int x = 0;
 int y = 0;
 int x2 = 0;
-
 GtkWidget *window;
 GtkWidget *darea;
-
 void*more_thread(void*args)
 {
-
+	
 }
 static gboolean on_draw_event(GtkWidget *widget, cairo_t *cr, //Draw event for cairo, will be triggered each time a draw event is executed
                               gpointer user_data)
@@ -51,8 +48,7 @@ static void do_drawing(cairo_t *cr) //Do the drawing against the cairo surface a
     //------------------------------------------Insert planet drawings Above-------------------------------------------
 
 }
-
-GtkTickCallback on_frame_tick(GtkWidget * widget, GtkFrameClock * frame_clock, gpointer user_data) //Tick handler to update the frame
+GtkTickCallback on_frame_tick(GtkWidget * widget, GdkFrameClock * frame_clock, gpointer user_data) //Tick handler to update the frame
 {
     gdk_frame_clock_begin_updating (frame_clock); //Update the frame clock
     gtk_widget_queue_draw(darea); //Queue a draw event
