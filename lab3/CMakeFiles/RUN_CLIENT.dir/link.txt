@@ -1,1 +1,1 @@
-/usr/bin/cc  -pthread -lpthread -lrt   CMakeFiles/RUN_CLIENT.dir/client.c.o CMakeFiles/RUN_CLIENT.dir/wrapper.c.o  -o RUN_CLIENT -lrt 
+/usr/bin/cc  -pthread -lpthread -lrt   CMakeFiles/RUN_CLIENT.dir/wrapper.c.o CMakeFiles/RUN_CLIENT.dir/client.c.o  -o RUN_CLIENT -lrt 

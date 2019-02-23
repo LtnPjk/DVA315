@@ -5,9 +5,11 @@
 /* #include "wrapper.c" */
 
 #define CYCLE_TIME 100
-#define QUEUE_NAME "/mq1"
+//#define QUEUE_NAME "/mq1"
+#define MASS_MAX 100
 
 static void do_drawing(cairo_t *);
+
 int x = 0;
 int y = 0;
 int x2 = 0;
@@ -79,6 +81,19 @@ void *manageMail(void * u){
     }
     printf("SERVER: Mailslot created!\n");
 
+    //init semaphores
+    sem_t *empty = sem_open(SEM_EMPTY, O_CREAT | O_RDWR, 0, BUFFER_SIZE);
+    sem_t *full = sem_open(SEM_FULL, O_CREAT | O_RDWR, 0, 0);
+    /* sem_init(bEmpty, 0, BUFFER_SIZE); */
+
+    if(empty == SEM_FAILED || full == SEM_FAILED){
+        printf("SERVER: HAH SEM_FAILED U FKN N00B!!!\n");
+    }
+    int semValue;
+    sem_getvalue(empty, &semValue);
+    printf("empty_sem: %d\n", semValue);
+    counter = 0;
+
     //init linked list
     planet_type * head = initList();
 
@@ -90,7 +105,10 @@ void *manageMail(void * u){
     pthread_t pl;
     //Continously read mailslot
     while(1){
-        if (MQread(&mq, (void*)&msg) >= 1){
+        printf("SERVER: Waiting for request...\n");
+        sem_wait(full);
+        int mqRet = MQread(&mq, (void*)&msg);
+        if (mqRet >= 1){
             printf("SERVER: Request recieved, planet.name: %s\n", msg.name);
             //create planet thread
             msg.next = NULL;
@@ -98,6 +116,10 @@ void *manageMail(void * u){
 
             pthread_create(&pl, NULL, &planet, (void *)&createPlanetArg);
         }
+        else if (mqRet == 0){
+            printf("SERVER: ERROR = %d\n", errno);
+        }
+        sem_post(empty);
     }
 }
 
@@ -110,6 +132,47 @@ static gboolean on_draw_event(GtkWidget *widget, cairo_t *cr, //Draw event for c
 {
     do_drawing(cr); //Launch the actual draw method
     return FALSE; //Return something
+}
+
+planet_type testPlanet;
+
+void drawPlanet(cairo_t *cr, planet_type *planet){
+
+    //populate points
+    size_t size = sizeof(planet->points)/sizeof(vector2D);
+
+    for(int k = 0; k < size; k++){
+        planet->points[k].x = planet->sx - planet->radius*cos((double)k/size*3.1415*2);
+        //printf("x - %f\n", planet.radius*cos(k/size*3.1415*2));
+        planet->points[k].y = planet->sy + planet->radius*sin((double)k/size*3.1415*2);
+        //printf("coord of point %d: %f | %f \n", k, planet.points[k].x, planet.points[k].y);
+    }
+    //generate colors
+    srand((unsigned int)time(NULL));
+
+    float R = 0.0;//rand()/(float)RAND_MAX;
+    float G = planet->mass / (float)MASS_MAX;
+    float B = 1.0 - planet->mass / (float)MASS_MAX;
+
+    //Cairo settings
+    cairo_set_source_rgb(cr, R, G, B);
+    cairo_set_line_width(cr, 1.2);
+
+    //increment mult
+    planet->mult += 0.02;
+    if(planet->mult >size)
+        planet->mult = 0.00;
+
+    //draw circle then mult-table
+    for(int i = 0; i < size; i++){
+        cairo_move_to(cr, planet->points[i].x, planet->points[i].y);
+        cairo_line_to(cr, planet->points[(i+1)%size].x, planet->points[(i+1)%size].y);
+        int j = ((int)((i*planet->mult)) % size);
+        cairo_move_to(cr, planet->points[i].x, planet->points[i].y);
+        cairo_line_to(cr, planet->points[j].x, planet->points[j].y);
+    }
+    cairo_stroke(cr);
+
 }
 
 static void do_drawing(cairo_t *cr) //Do the drawing against the cairo surface area cr
@@ -133,10 +196,8 @@ static void do_drawing(cairo_t *cr) //Do the drawing against the cairo surface a
     // --------- cairo_arc(cr, planet.xpos, planet.ypos, 10, 0, 2*3.1415)
     // --------- cairo_fill(cr)
     //------------------------------------------Insert planet drawings below-------------------------------------------
-
-
-
-
+    //sleep(1);
+    drawPlanet(cr, &testPlanet);
     //------------------------------------------Insert planet drawings Above-------------------------------------------
 
 }
@@ -177,6 +238,16 @@ int main(int argc, char *argv[]) //Main function
 
     int mS = pthread_create(&mailServer, NULL, manageMail, (void*)0);
 
+
+    strcpy(testPlanet.name, "TestPlanet");
+    testPlanet.sx = 400.0;
+    testPlanet.sy = 400.0;
+    testPlanet.vx = 0.0;
+    testPlanet.vy = 0.0;
+    testPlanet.mass = 80;
+    testPlanet.life = 500;
+    testPlanet.radius = 100;
+    testPlanet.mult = 2.0;
 
     //-------------------------------Insert code for pthreads above------------------------------------------------
 

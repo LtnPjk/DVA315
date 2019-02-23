@@ -57,33 +57,9 @@ include CMakeFiles/RUN_CLIENT.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/RUN_CLIENT.dir/flags.make
 
-CMakeFiles/RUN_CLIENT.dir/client.c.o: CMakeFiles/RUN_CLIENT.dir/flags.make
-CMakeFiles/RUN_CLIENT.dir/client.c.o: client.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ltnpjk/github/DVA315/lab3/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/RUN_CLIENT.dir/client.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/RUN_CLIENT.dir/client.c.o   -c /home/ltnpjk/github/DVA315/lab3/client.c
-
-CMakeFiles/RUN_CLIENT.dir/client.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/RUN_CLIENT.dir/client.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ltnpjk/github/DVA315/lab3/client.c > CMakeFiles/RUN_CLIENT.dir/client.c.i
-
-CMakeFiles/RUN_CLIENT.dir/client.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/RUN_CLIENT.dir/client.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ltnpjk/github/DVA315/lab3/client.c -o CMakeFiles/RUN_CLIENT.dir/client.c.s
-
-CMakeFiles/RUN_CLIENT.dir/client.c.o.requires:
-
-.PHONY : CMakeFiles/RUN_CLIENT.dir/client.c.o.requires
-
-CMakeFiles/RUN_CLIENT.dir/client.c.o.provides: CMakeFiles/RUN_CLIENT.dir/client.c.o.requires
-	$(MAKE) -f CMakeFiles/RUN_CLIENT.dir/build.make CMakeFiles/RUN_CLIENT.dir/client.c.o.provides.build
-.PHONY : CMakeFiles/RUN_CLIENT.dir/client.c.o.provides
-
-CMakeFiles/RUN_CLIENT.dir/client.c.o.provides.build: CMakeFiles/RUN_CLIENT.dir/client.c.o
-
-
 CMakeFiles/RUN_CLIENT.dir/wrapper.c.o: CMakeFiles/RUN_CLIENT.dir/flags.make
 CMakeFiles/RUN_CLIENT.dir/wrapper.c.o: wrapper.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ltnpjk/github/DVA315/lab3/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/RUN_CLIENT.dir/wrapper.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ltnpjk/github/DVA315/lab3/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/RUN_CLIENT.dir/wrapper.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/RUN_CLIENT.dir/wrapper.c.o   -c /home/ltnpjk/github/DVA315/lab3/wrapper.c
 
 CMakeFiles/RUN_CLIENT.dir/wrapper.c.i: cmake_force
@@ -105,16 +81,40 @@ CMakeFiles/RUN_CLIENT.dir/wrapper.c.o.provides: CMakeFiles/RUN_CLIENT.dir/wrappe
 CMakeFiles/RUN_CLIENT.dir/wrapper.c.o.provides.build: CMakeFiles/RUN_CLIENT.dir/wrapper.c.o
 
 
+CMakeFiles/RUN_CLIENT.dir/client.c.o: CMakeFiles/RUN_CLIENT.dir/flags.make
+CMakeFiles/RUN_CLIENT.dir/client.c.o: client.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ltnpjk/github/DVA315/lab3/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/RUN_CLIENT.dir/client.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/RUN_CLIENT.dir/client.c.o   -c /home/ltnpjk/github/DVA315/lab3/client.c
+
+CMakeFiles/RUN_CLIENT.dir/client.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/RUN_CLIENT.dir/client.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ltnpjk/github/DVA315/lab3/client.c > CMakeFiles/RUN_CLIENT.dir/client.c.i
+
+CMakeFiles/RUN_CLIENT.dir/client.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/RUN_CLIENT.dir/client.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ltnpjk/github/DVA315/lab3/client.c -o CMakeFiles/RUN_CLIENT.dir/client.c.s
+
+CMakeFiles/RUN_CLIENT.dir/client.c.o.requires:
+
+.PHONY : CMakeFiles/RUN_CLIENT.dir/client.c.o.requires
+
+CMakeFiles/RUN_CLIENT.dir/client.c.o.provides: CMakeFiles/RUN_CLIENT.dir/client.c.o.requires
+	$(MAKE) -f CMakeFiles/RUN_CLIENT.dir/build.make CMakeFiles/RUN_CLIENT.dir/client.c.o.provides.build
+.PHONY : CMakeFiles/RUN_CLIENT.dir/client.c.o.provides
+
+CMakeFiles/RUN_CLIENT.dir/client.c.o.provides.build: CMakeFiles/RUN_CLIENT.dir/client.c.o
+
+
 # Object files for target RUN_CLIENT
 RUN_CLIENT_OBJECTS = \
-"CMakeFiles/RUN_CLIENT.dir/client.c.o" \
-"CMakeFiles/RUN_CLIENT.dir/wrapper.c.o"
+"CMakeFiles/RUN_CLIENT.dir/wrapper.c.o" \
+"CMakeFiles/RUN_CLIENT.dir/client.c.o"
 
 # External object files for target RUN_CLIENT
 RUN_CLIENT_EXTERNAL_OBJECTS =
 
-RUN_CLIENT: CMakeFiles/RUN_CLIENT.dir/client.c.o
 RUN_CLIENT: CMakeFiles/RUN_CLIENT.dir/wrapper.c.o
+RUN_CLIENT: CMakeFiles/RUN_CLIENT.dir/client.c.o
 RUN_CLIENT: CMakeFiles/RUN_CLIENT.dir/build.make
 RUN_CLIENT: CMakeFiles/RUN_CLIENT.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ltnpjk/github/DVA315/lab3/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable RUN_CLIENT"
@@ -125,8 +125,8 @@ CMakeFiles/RUN_CLIENT.dir/build: RUN_CLIENT
 
 .PHONY : CMakeFiles/RUN_CLIENT.dir/build
 
-CMakeFiles/RUN_CLIENT.dir/requires: CMakeFiles/RUN_CLIENT.dir/client.c.o.requires
 CMakeFiles/RUN_CLIENT.dir/requires: CMakeFiles/RUN_CLIENT.dir/wrapper.c.o.requires
+CMakeFiles/RUN_CLIENT.dir/requires: CMakeFiles/RUN_CLIENT.dir/client.c.o.requires
 
 .PHONY : CMakeFiles/RUN_CLIENT.dir/requires
 

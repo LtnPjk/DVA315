@@ -8,19 +8,19 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK REQUIRED gtk+-3.0)
 
 file(GLOB Lab3
-    "server.c"
     "wrapper.h"
     "wrapper.c"
+    "server.c"
         )
 add_executable(RUN_SERVER ${Lab3})
-target_link_libraries(RUN_SERVER rt)
+target_link_libraries(RUN_SERVER rt m)
 target_include_directories(RUN_SERVER PUBLIC ${GTK_INCLUDE_DIRS})
 target_link_libraries(RUN_SERVER ${GTK_LIBRARIES})
 
 file(GLOB Lab3_client
-    "client.c"
     "wrapper.h"
     "wrapper.c"
+    "client.c"
     )
 add_executable(RUN_CLIENT ${Lab3_client})
 target_link_libraries(RUN_CLIENT rt)

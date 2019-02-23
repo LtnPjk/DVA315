@@ -13,6 +13,8 @@ wrapper.h
 /home/ltnpjk/github/DVA315/lab3/wrapper.c
 wrapper.h
 /home/ltnpjk/github/DVA315/lab3/wrapper.h
+semaphore.h
+-
 
 /home/ltnpjk/github/DVA315/lab3/wrapper.h
 stdlib.h
@@ -30,5 +32,7 @@ errno.h
 mqueue.h
 -
 pthread.h
+-
+semaphore.h
 -
 

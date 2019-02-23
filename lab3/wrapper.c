@@ -1,6 +1,6 @@
 #include "wrapper.h"
+#include <semaphore.h>
 
-#define QUEUE_NAME "/mq1"
 #define MAX_SIZE 1024
 
 /* pthread_mutex_t l1 = PTHREAD_MUTEX_INITIALIZER; */
@@ -16,8 +16,7 @@ int MQcreate (mqd_t * mq, char * name)
     attr.mq_flags = 0;
     attr.mq_maxmsg = 10;
     attr.mq_msgsize = MAX_SIZE;
-    attr.mq_curmsgs = 0;
-    *mq = mq_open(name, O_CREAT | O_NONBLOCK | O_RDONLY, 0666, &attr);
+    attr.mq_curmsgs = 0;*mq = mq_open(name, O_NONBLOCK | O_CREAT | O_RDWR, 0666, &attr);
     if(*mq == -1){
         return 0;
     }
@@ -35,7 +34,7 @@ int MQconnect (mqd_t * mq, char * name)
     attr.mq_maxmsg = 10;
     attr.mq_msgsize = MAX_SIZE;
     attr.mq_curmsgs = 0;
-    *mq = mq_open(name, O_WRONLY, 0666, &attr);
+    *mq = mq_open(name, O_RDWR | O_NONBLOCK, 0666, &attr);
     if(*mq == -1)
         return 0;
     else
@@ -68,7 +67,7 @@ int MQwrite (mqd_t * mq, void * sendBuffer)
 
 int MQclose(mqd_t * mq, char * name)
 {
-    /* close a mailslot, returning whatever the service call returns Uses mq as reference pointer, so that you can 	
+    /* close a mailslot, returning whatever the service call returns Uses mq as reference pointer, so that you can
     reach the handle from anywhere*/
     /* should return 1 on success and 0 on fail*/
     int retVal;
