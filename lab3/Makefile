@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/ltnpjk/Documents/Github/DVA315/Lab 3_newer/Lab 3"
+CMAKE_SOURCE_DIR = /home/ltnpjk/github/DVA315/lab3
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/ltnpjk/Documents/Github/DVA315/Lab 3_newer/Lab 3"
+CMAKE_BINARY_DIR = /home/ltnpjk/github/DVA315/lab3
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/ltnpjk/Documents/Github/DVA315/Lab 3_newer/Lab 3/CMakeFiles" "/home/ltnpjk/Documents/Github/DVA315/Lab 3_newer/Lab 3/CMakeFiles/progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ltnpjk/github/DVA315/lab3/CMakeFiles /home/ltnpjk/github/DVA315/lab3/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/ltnpjk/Documents/Github/DVA315/Lab 3_newer/Lab 3/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ltnpjk/github/DVA315/lab3/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -197,6 +197,7 @@ wrapper.o: wrapper.c.o
 # target to build an object file
 wrapper.c.o:
 	$(MAKE) -f CMakeFiles/RUN_SERVER.dir/build.make CMakeFiles/RUN_SERVER.dir/wrapper.c.o
+	$(MAKE) -f CMakeFiles/RUN_CLIENT.dir/build.make CMakeFiles/RUN_CLIENT.dir/wrapper.c.o
 .PHONY : wrapper.c.o
 
 wrapper.i: wrapper.c.i
@@ -206,6 +207,7 @@ wrapper.i: wrapper.c.i
 # target to preprocess a source file
 wrapper.c.i:
 	$(MAKE) -f CMakeFiles/RUN_SERVER.dir/build.make CMakeFiles/RUN_SERVER.dir/wrapper.c.i
+	$(MAKE) -f CMakeFiles/RUN_CLIENT.dir/build.make CMakeFiles/RUN_CLIENT.dir/wrapper.c.i
 .PHONY : wrapper.c.i
 
 wrapper.s: wrapper.c.s
@@ -215,6 +217,7 @@ wrapper.s: wrapper.c.s
 # target to generate assembly for a file
 wrapper.c.s:
 	$(MAKE) -f CMakeFiles/RUN_SERVER.dir/build.make CMakeFiles/RUN_SERVER.dir/wrapper.c.s
+	$(MAKE) -f CMakeFiles/RUN_CLIENT.dir/build.make CMakeFiles/RUN_CLIENT.dir/wrapper.c.s
 .PHONY : wrapper.c.s
 
 # Help Target

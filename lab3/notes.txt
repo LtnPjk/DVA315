@@ -1,0 +1,14 @@
+Server:
+    open mailslot
+    listen for planet_create
+    add planet_thread
+
+    planet_thread:
+        add self to linked list in database
+        while(1):
+            calculate acceleration
+
+
+CRITICAL:
+    Acceleration calc, Server.G - Server.P [Access to Database]
+

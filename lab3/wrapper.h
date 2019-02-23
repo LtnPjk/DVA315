@@ -8,9 +8,6 @@
 #include <errno.h>
 #include <mqueue.h>
 #include <pthread.h>
-//#include "wrapper.c"
-
-
 
 // Mailslot handling:
 extern int threadCreate (void * functionCall, int threadParam);
@@ -20,11 +17,8 @@ extern int MQconnect (mqd_t * mq, char * name);
 extern int MQread (mqd_t * mq, void ** refBuffer);
 extern int MQwrite (mqd_t * mq, void * data);
 
-
-
-
 // Struct for planet data will be used in lab 2 and 3 !!!!!
-// Just ignore in lab1 or you can try to send it on your mailslot, 
+// Just ignore in lab1 or you can try to send it on your mailslot,
 // will be done in lab 2 and 3
 
 typedef struct pt {

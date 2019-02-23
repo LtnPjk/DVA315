@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/RUN_CLIENT.dir/client.c.o"
+  "CMakeFiles/RUN_CLIENT.dir/wrapper.c.o"
   "RUN_CLIENT.pdb"
   "RUN_CLIENT"
 )

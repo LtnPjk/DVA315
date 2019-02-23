@@ -4,3 +4,6 @@
 CMakeFiles/RUN_CLIENT.dir/client.c.o: client.c
 CMakeFiles/RUN_CLIENT.dir/client.c.o: wrapper.h
 
+CMakeFiles/RUN_CLIENT.dir/wrapper.c.o: wrapper.c
+CMakeFiles/RUN_CLIENT.dir/wrapper.c.o: wrapper.h
+

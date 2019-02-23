@@ -1,7 +1,11 @@
 #include <cairo.h>
 #include <gtk/gtk.h>
 #include <pthread.h>
+#include "wrapper.h"
+/* #include "wrapper.c" */
 
+#define CYCLE_TIME 100
+#define QUEUE_NAME "/mq1"
 
 static void do_drawing(cairo_t *);
 int x = 0;
@@ -9,9 +13,97 @@ int y = 0;
 int x2 = 0;
 GtkWidget *window;
 GtkWidget *darea;
+
+typedef struct arg_struct{
+    planet_type planetToCreate;
+    planet_type *headOfList;
+}listArgs;
+
+void addToList(void *planetArgs){
+    listArgs *args = planetArgs;
+
+    if(args->headOfList->next != NULL){
+        printf("NODE: %s\n", args->headOfList->name);
+        args->headOfList = args->headOfList->next;
+        addToList(args);
+    }
+    else{
+        printf("END OF LIST FOUND\n");
+        args->headOfList->next = &(args->planetToCreate);
+    }
+}
+
+void *planet(void *arguments){
+    //traverse list until next=0, insert planet
+    //while(1): calculate, update database
+    //life = 0, call remove planet
+
+    listArgs *args = arguments;
+
+    if(args->planetToCreate.name[0] != 0){
+        printf("MY NAME IS: %s\n", args->planetToCreate.name);
+        addToList(args);
+    }
+    else{
+        printf("HEADNODE RECIEIIEVCJ\n");
+    }
+    while(1){
+
+    }
+}
+
+planet_type * initList(){
+    //Init database
+    planet_type *head = NULL;
+    planet_type *temp = (planet_type*)malloc(sizeof(planet_type));
+
+    if(temp==NULL){
+        printf("SERVER: Could not allocate memory for head!\n");
+        return 0;
+    }
+    head = temp;
+    return head;
+}
+
+void *manageMail(void * u){
+    //Open mailslot and return handle to client
+    //Listen to mailslot for planet_create
+    //Start planet_threads accordingly
+
+    mqd_t mq;
+    planet_type msg;
+    //try to open mailslot
+    if(MQcreate(&mq, QUEUE_NAME) != 1){
+        printf("SERVER: Could not create mailslot!\n");
+        return NULL;
+    }
+    printf("SERVER: Mailslot created!\n");
+
+    //init linked list
+    planet_type * head = initList();
+
+    //Create struct to send both head of list and planet to pthread_create
+    listArgs createPlanetArg;
+    createPlanetArg.planetToCreate.name[0] = 0;
+    createPlanetArg.headOfList = head;
+
+    pthread_t pl;
+    //Continously read mailslot
+    while(1){
+        if (MQread(&mq, (void*)&msg) >= 1){
+            printf("SERVER: Request recieved, planet.name: %s\n", msg.name);
+            //create planet thread
+            msg.next = NULL;
+            createPlanetArg.planetToCreate = msg;
+
+            pthread_create(&pl, NULL, &planet, (void *)&createPlanetArg);
+        }
+    }
+}
+
 void*more_thread(void*args)
 {
-	
+
 }
 static gboolean on_draw_event(GtkWidget *widget, cairo_t *cr, //Draw event for cairo, will be triggered each time a draw event is executed
                               gpointer user_data)
@@ -59,7 +151,7 @@ int main(int argc, char *argv[]) //Main function
 {
     //----------------------------------------Variable declarations should be placed below---------------------------------
 	pthread_t i_am_thread;
-
+    pthread_t mailServer;
     //----------------------------------------Variable declarations should be placed Above---------------------------------
 
     //GUI stuff, don't touch unless you know what you are doing, or if you talked to me
@@ -82,6 +174,9 @@ int main(int argc, char *argv[]) //Main function
 
     //-------------------------------Insert code for pthreads below------------------------------------------------
     int ec = pthread_create(&i_am_thread, NULL, more_thread, (void*)0);
+
+    int mS = pthread_create(&mailServer, NULL, manageMail, (void*)0);
+
 
     //-------------------------------Insert code for pthreads above------------------------------------------------
 

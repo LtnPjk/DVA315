@@ -1,6 +1,10 @@
 #include "wrapper.h"
 
+#define QUEUE_NAME "/mq1"
 #define MAX_SIZE 1024
+
+/* pthread_mutex_t l1 = PTHREAD_MUTEX_INITIALIZER; */
+/* pthread_mutex_t l2 = PTHREAD_MUTEX_INITIALIZER; */
 
 struct mq_attr attr;
 

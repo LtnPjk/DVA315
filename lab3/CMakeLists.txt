@@ -19,6 +19,8 @@ target_link_libraries(RUN_SERVER ${GTK_LIBRARIES})
 
 file(GLOB Lab3_client
     "client.c"
+    "wrapper.h"
+    "wrapper.c"
     )
 add_executable(RUN_CLIENT ${Lab3_client})
 target_link_libraries(RUN_CLIENT rt)

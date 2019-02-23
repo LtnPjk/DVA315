@@ -4,7 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/ltnpjk/Documents/Github/DVA315/Lab 3_newer/Lab 3/client.c" "/home/ltnpjk/Documents/Github/DVA315/Lab 3_newer/Lab 3/CMakeFiles/RUN_CLIENT.dir/client.c.o"
+  "/home/ltnpjk/github/DVA315/lab3/client.c" "/home/ltnpjk/github/DVA315/lab3/CMakeFiles/RUN_CLIENT.dir/client.c.o"
+  "/home/ltnpjk/github/DVA315/lab3/wrapper.c" "/home/ltnpjk/github/DVA315/lab3/CMakeFiles/RUN_CLIENT.dir/wrapper.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
