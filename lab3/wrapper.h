@@ -49,7 +49,7 @@ typedef struct pt {
 	int			life;		// Planet life
 	char		pid[30];	// String containing ID of creating process
     //custom garbage
-    vector2D    points[80];
+    vector2D    points[50];
     double      mult;
 } planet_type;
 

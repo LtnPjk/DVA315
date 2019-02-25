@@ -5,11 +5,11 @@
 #include <unistd.h>
 /* #include "wrapper.c" */
 
-#define CYCLE_TIME 200
+#define CYCLE_TIME 500
 //#define QUEUE_NAME "/mq1"
 #define MASS_MAX 100000000
 #define DT 10
-
+/* 0.0000000000667259; */
 double G_CONST = 0.0000000000667259;
 planet_type * headGlob;
 static void do_drawing(cairo_t *);
@@ -23,6 +23,7 @@ GtkWidget *darea;
 typedef struct arg_struct{
     planet_type planetToCreate;
     planet_type *headOfList;
+    planet_type *planetPointer;
 }listArgs;
 
 void addToList(listArgs *planetArgs){
@@ -41,6 +42,7 @@ void addToList(listArgs *planetArgs){
     }
     *temp1 = args->planetToCreate;
     tempo->next = temp1;
+    args->planetPointer = temp1;
 }
 
 void removeFromList(void *planetArgs) {
@@ -56,6 +58,7 @@ void removeFromList(void *planetArgs) {
     }
     planet_type *temp1 = tempo->next;
     tempo->next = tempo->next->next;
+    printf("%s died in a horrible accident!\n", temp1->name);
     free(temp1);
 }
 void printPlanet(planet_type *planet){
@@ -79,7 +82,7 @@ void *planet(listArgs *arguments){
         printf("HEADNODE RECIEIIEVCJ\n");
     }
     while(1){
-        if(args.planetToCreate.life == 0) { //dead planet condition
+        if(args.planetPointer->life <= 0 || !(0 < args.planetPointer->sx && args.planetPointer->sx < 1000) || !(0 < args.planetPointer->sy && args.planetPointer->sy < 1000)) { //dead planet condition
             removeFromList(&args);
             break;
         }
@@ -90,24 +93,25 @@ void *planet(listArgs *arguments){
         planet_type *temp = args.headOfList;
 
         while(temp->next != NULL){
-            if(strcmp(temp->next->name, args.planetToCreate.name) != 0){
-                double dist = sqrt(pow(temp->next->sx - args.planetToCreate.sx, 2.0) + pow(temp->next->sy - args.planetToCreate.sy, 2));
+            if(strcmp(temp->next->name, args.planetPointer->name) != 0){
+                double dist = sqrt(pow(temp->next->sx - args.planetPointer->sx, 2.0) + pow(temp->next->sy - args.planetPointer->sy, 2));
                 double a = G_CONST*(temp->next->mass/(dist*dist));
 
-                ax += a*((temp->next->sx - args.planetToCreate.sx)/dist);
-                ay += a*((temp->next->sy - args.planetToCreate.sy)/dist);
+                ax += a*((temp->next->sx - args.planetPointer->sx)/dist);
+                ay += a*((temp->next->sy - args.planetPointer->sy)/dist);
             }
             temp = temp->next;
         }
 
-        args.planetToCreate.vx += ax*DT;
-        args.planetToCreate.vy += ay*DT;
+        args.planetPointer->vx += ax*DT;
+        args.planetPointer->vy += ay*DT;
 
-        args.planetToCreate.sx += args.planetToCreate.vx*DT;
-        args.planetToCreate.sy += args.planetToCreate.vy*DT;
+        args.planetPointer->sx += args.planetPointer->vx*DT;
+        args.planetPointer->sy += args.planetPointer->vy*DT;
 
-        printf("PLANET: %s\n", args.planetToCreate.name); //test print
-        printPlanet(&(args.planetToCreate));
+        /* printPlanet(args.planetPointer); */
+
+        args.planetPointer->life -= 1;
         usleep(CYCLE_TIME); //så att min dator inte brinner upp
     }
 }
@@ -187,7 +191,7 @@ double map(double mass, double in_min, double in_max, double out_min, double out
 
 void drawPlanet(cairo_t *cr, planet_type *planet){
     //get radius based on planets mass
-    int radius = (int)map(planet->mass, 1000.0, 100000000.0, 50.0, 200.0);
+    int radius = (int)map(planet->mass, 1000.0, 100000000.0, 30.0, 60.0);
 
     /* printf("RADIUS: %d\n", radius); */
     /* usleep(500); */
@@ -205,15 +209,15 @@ void drawPlanet(cairo_t *cr, planet_type *planet){
     srand((unsigned int)time(NULL));
 
     float R = 0.0;//rand()/(float)RAND_MAX;
-    float G = planet->mass / (float)MASS_MAX;
-    float B = 0.8 - planet->mass / (float)MASS_MAX;
+    float G = 0.4 + planet->mass / (float)MASS_MAX;
+    float B = 0.6 - planet->mass / (float)MASS_MAX;
 
     //Cairo settings
     cairo_set_source_rgb(cr, R, G, B);
     cairo_set_line_width(cr, 1.2);
 
     //increment mult
-    planet->mult += 0.005;
+    planet->mult += 0.01;
     if(planet->mult > size)
         planet->mult = 0.00;
 
