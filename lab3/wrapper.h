@@ -9,6 +9,7 @@
 #include <mqueue.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <unistd.h>
 
 // Mailslot handling:
 extern int threadCreate (void * functionCall, int threadParam);
@@ -21,10 +22,7 @@ extern int MQwrite (mqd_t * mq, void * data);
 //Custom garbage
 int counter;
 #define BUFFER_SIZE 10
-#define QUEUE_NAME "/mq1"
-#define SEM_EMPTY "/sem_empty14"
-#define SEM_FULL "/sem_full14"
-#define SEM_PERMS (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP)
+#define QUEUE_NAME "/mq4"
 
 // Struct for planet data will be used in lab 2 and 3 !!!!!
 // Just ignore in lab1 or you can try to send it on your mailslot,

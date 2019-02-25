@@ -2,11 +2,15 @@
 #include <gtk/gtk.h>
 #include <pthread.h>
 #include "wrapper.h"
+#include <unistd.h>
 /* #include "wrapper.c" */
 
 #define CYCLE_TIME 100
 //#define QUEUE_NAME "/mq1"
 #define MASS_MAX 100
+#define DT 5
+
+double G_CONST = 0.000667259;
 
 static void do_drawing(cairo_t *);
 
@@ -23,16 +27,36 @@ typedef struct arg_struct{
 
 void addToList(void *planetArgs){
     listArgs *args = planetArgs;
+    planet_type *tempo = args->headOfList;
 
-    if(args->headOfList->next != NULL){
-        printf("NODE: %s\n", args->headOfList->name);
-        args->headOfList = args->headOfList->next;
-        addToList(args);
+    while(tempo->next != NULL){
+        printf("NODE: %s", args->headOfList->next->name);
+        tempo = tempo->next;
     }
-    else{
-        printf("END OF LIST FOUND\n");
-        args->headOfList->next = &(args->planetToCreate);
+    planet_type *temp1 = malloc(sizeof(planet_type));
+
+    if(temp1 == NULL){
+        printf("COULD NOT ALLOCATE MARMARMOY!!\n");
+        return;
     }
+    *temp1 = args->planetToCreate;
+    tempo->next = temp1;
+}
+
+void removeFromList(void *planetArgs) {
+    listArgs *args = planetArgs;
+    planet_type *tempo = args->headOfList; //keep track of where list starts
+
+    while(strcmp(tempo->next->name, args->planetToCreate.name) != 0) {
+        if(tempo->next == NULL) {
+            printf("REMOVE ITEM NOT IN LIST\n");
+            return;
+        }
+        tempo = tempo->next;
+    }
+    planet_type *temp1 = tempo->next;
+    tempo->next = tempo->next->next;
+    free(temp1);
 }
 
 void *planet(void *arguments){
@@ -44,13 +68,43 @@ void *planet(void *arguments){
 
     if(args->planetToCreate.name[0] != 0){
         printf("MY NAME IS: %s\n", args->planetToCreate.name);
+        //Lock DB
+        pthread_mutex_lock(&mutex);
         addToList(args);
+        pthread_mutex_unlock(&mutex);
     }
     else{
         printf("HEADNODE RECIEIIEVCJ\n");
     }
     while(1){
+        //Do calculations
+        double ax = 0;
+        double ay = 0;
+        planet_type *temp = args->headOfList;
 
+        while(temp->next != NULL){
+            pthread_mutex_lock(&mutex);
+            if(strcmp(temp->next->name, args->planetToCreate.name) != 0){
+                double dist = sqrt(pow(temp->next->sx - args->planetToCreate.sx, 2.0) + pow(temp->next->sy - args->planetToCreate.sy, 2));
+                double a = G_CONST*(temp->next->mass/(dist*dist));
+
+                ax += a*((temp->next->sx - args->planetToCreate.sx)/dist);
+                ay += a*((temp->next->sy - args->planetToCreate.sy)/dist);
+            }
+            temp->next = temp->next->next;
+        }
+
+        args->planetToCreate.vx += ax*DT;
+        args->planetToCreate.vy += ay*DT;
+
+        args->planetToCreate.sx += args->planetToCreate.vx*DT;
+        args->planetToCreate.sy += args->planetToCreate.vy*DT;
+
+        if(args->planetToCreate.life <= 0){
+            removeFromList(arguments);
+        }
+        pthread_mutex_unlock(&mutex);
+        sleep(1);
     }
 }
 
@@ -72,6 +126,10 @@ void *manageMail(void * u){
     //Listen to mailslot for planet_create
     //Start planet_threads accordingly
 
+    //Init mutex for linked list
+    pthread_mutex_init(&mutex, NULL);
+
+    //mq_unlink(QUEUE_NAME);//???
     mqd_t mq;
     planet_type msg;
     //try to open mailslot
@@ -80,19 +138,6 @@ void *manageMail(void * u){
         return NULL;
     }
     printf("SERVER: Mailslot created!\n");
-
-    //init semaphores
-    sem_t *empty = sem_open(SEM_EMPTY, O_CREAT | O_RDWR, 0, BUFFER_SIZE);
-    sem_t *full = sem_open(SEM_FULL, O_CREAT | O_RDWR, 0, 0);
-    /* sem_init(bEmpty, 0, BUFFER_SIZE); */
-
-    if(empty == SEM_FAILED || full == SEM_FAILED){
-        printf("SERVER: HAH SEM_FAILED U FKN N00B!!!\n");
-    }
-    int semValue;
-    sem_getvalue(empty, &semValue);
-    printf("empty_sem: %d\n", semValue);
-    counter = 0;
 
     //init linked list
     planet_type * head = initList();
@@ -105,21 +150,21 @@ void *manageMail(void * u){
     pthread_t pl;
     //Continously read mailslot
     while(1){
-        printf("SERVER: Waiting for request...\n");
-        sem_wait(full);
-        int mqRet = MQread(&mq, (void*)&msg);
+        int mqRet;
+        mqRet = MQread(&mq, (void*)&msg);
         if (mqRet >= 1){
             printf("SERVER: Request recieved, planet.name: %s\n", msg.name);
+            if(strcmp(msg.name, "END") == 0){
+                return MQclose(&mq, QUEUE_NAME);
+            }
             //create planet thread
             msg.next = NULL;
             createPlanetArg.planetToCreate = msg;
-
-            pthread_create(&pl, NULL, &planet, (void *)&createPlanetArg);
+            pthread_create(&pl, NULL, (void *(*)(void *)) &planet, (void *)&createPlanetArg);
         }
         else if (mqRet == 0){
-            printf("SERVER: ERROR = %d\n", errno);
+            printf("SERVER: ERROR=%d\n", errno);
         }
-        sem_post(empty);
     }
 }
 

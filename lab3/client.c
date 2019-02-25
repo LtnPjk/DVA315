@@ -3,31 +3,33 @@
 int main()
 {
 	//Implement you inter process communication here, happy coding
-    planet_type planet;
     mqd_t mq;
-    sem_t *empty = sem_open(SEM_EMPTY, O_RDWR);
-    sem_t *full = sem_open(SEM_FULL, O_RDWR);
 
     if(MQconnect(&mq, QUEUE_NAME) != 1){
         printf("CLIENT: Could not connect!\n");
+        return;
     }
     else{
         printf("CLIENT: Connected!\n");
-
+    }
     while(1){
         printf("---  Create Planet  ---\n");
         printf("Name:\tx-pos\ty-pos\tx-vel\ty-vel\tlife\n");
+        planet_type planet;
         scanf("%s",  planet.name);
         scanf("%lf", &planet.sx);
         scanf("%lf", &planet.sy);
         scanf("%lf", &planet.vx);
         scanf("%lf", &planet.vy);
+        scanf("%lf", &planet.mass);
         scanf("%d", &planet.life);
         printf("Spawning planet...\n");
-        sem_wait(empty);
+
         MQwrite(&mq, (void *)&planet);
-        printf("CLIENT: Request sent!\n\n");
-        sem_post(full);
+        if(strcmp(planet.name, "END") == 0){
+            printf("CLIENT: END request recieved...\n");
+            return MQclose(&mq, QUEUE_NAME);
         }
+        printf("CLIENT: Request sent!\n");
     }
 }
