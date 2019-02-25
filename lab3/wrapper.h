@@ -10,6 +10,9 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <unistd.h>
+#include <fcntl.h>           /* For O_* constants */
+#include <cairo.h>
+#include <gtk/gtk.h>
 
 // Mailslot handling:
 extern int threadCreate (void * functionCall, int threadParam);
@@ -20,9 +23,11 @@ extern int MQread (mqd_t * mq, void ** refBuffer);
 extern int MQwrite (mqd_t * mq, void * data);
 
 //Custom garbage
-int counter;
 #define BUFFER_SIZE 10
-#define QUEUE_NAME "/mq4"
+#define SEM_EMPTY "semempty"
+#define SEM_FULL "semfull"
+#define SEM_MUTEX "semmutex"
+#define QUEUE_NAME "/mq1"
 
 // Struct for planet data will be used in lab 2 and 3 !!!!!
 // Just ignore in lab1 or you can try to send it on your mailslot,
@@ -44,8 +49,7 @@ typedef struct pt {
 	int			life;		// Planet life
 	char		pid[30];	// String containing ID of creating process
     //custom garbage
-    vector2D    points[100];
-    int         radius;
+    vector2D    points[80];
     double      mult;
 } planet_type;
 

@@ -1,10 +1,7 @@
 #include "wrapper.h"
 #include <semaphore.h>
 
-#define MAX_SIZE 1024
-
-/* pthread_mutex_t l1 = PTHREAD_MUTEX_INITIALIZER; */
-/* pthread_mutex_t l2 = PTHREAD_MUTEX_INITIALIZER; */
+#define MAX_SIZE 1730
 
 struct mq_attr attr;
 
@@ -58,11 +55,11 @@ int MQwrite (mqd_t * mq, void * sendBuffer)
     /* Write a msg to a mailslot, return nr Uses mq as reference pointer, so that you can 	     reach the handle from anywhere*/
     /* of successful bytes written         */
     int retVal;
-    retVal = mq_send(*mq, (const char *) sendBuffer, sizeof(struct pt), 0);
-    if(retVal == -1){
-        retVal = 0;
-    }
-    return retVal;
+    retVal = mq_send(*mq, (const char *) sendBuffer, sizeof(planet_type), 0);
+    if(retVal == -1)
+        return 0;
+    else
+        return 1;
 }
 
 int MQclose(mqd_t * mq, char * name)
