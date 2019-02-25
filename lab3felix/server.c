@@ -1,10 +1,8 @@
-#include <cairo.h>
-#include <gtk/gtk.h>
-#include <pthread.h>
+
 #include "COMMON/wrapper.h"
 
 #define CYCLE_TIME 100
-#define QUEUE_NAME "/mq1"
+//#define QUEUE_NAME "/mq1"
 
 static void do_drawing(cairo_t *);
 int x = 0;
@@ -16,16 +14,15 @@ GtkWidget *darea;
 typedef struct arg_struct{
     planet_type planetToCreate;
     planet_type *headOfList;
-    int number;
 }listArgs;
 
 void addToList(listArgs *planetArgs){
     listArgs *args = planetArgs;
-    planet_type *tempo = args->headOfList; //keep track of where list starts
+    planet_type *tempo = args->headOfList; //temporary pointer
 
 
     while(tempo->next != NULL){
-        printf("NODE: %s", args->headOfList->next->name);
+        printf("NODE: %s\n", tempo->next->name);
         tempo = tempo->next;
     }
     planet_type *temp1 = malloc(sizeof(planet_type));
@@ -39,7 +36,7 @@ void addToList(listArgs *planetArgs){
 
 void removeFromList(void *planetArgs) {
     listArgs *args = planetArgs;
-    planet_type *tempo = args->headOfList; //keep track of where list starts
+    planet_type *tempo = args->headOfList; //temporary pointer
 
     while(strcmp(tempo->next->name, args->planetToCreate.name) != 0) {
         if(tempo->next == NULL) {
@@ -59,20 +56,25 @@ void *planet(listArgs *arguments){
     //while(1): calculate, update database
     //life = 0, call removeFromList()
 
-    listArgs *args = arguments;
-
-    if(args->planetToCreate.name[0] != 0){
-        printf("MY NAME IS: %s\n", args->planetToCreate.name);
-        addToList(args);
+    listArgs args;
+    args.planetToCreate = arguments->planetToCreate;
+    args.headOfList = arguments->headOfList;
+    if(args.planetToCreate.name[0] != 0){
+        printf("MY NAME IS: %s\n", args.planetToCreate.name);
+        addToList(&args);
 
     }
     else{
         printf("HEADNODE RECIEIIEVCJ\n");
     }
     while(1){
+        if(args.planetToCreate.life == 0) { //dead planet condition
+            removeFromList(&args);
+            break;
+        }
 
-        if(args->planetToCreate.life == 0)
-            removeFromList(arguments);
+        printf("PLANET: %s\n", args.planetToCreate.name); //test print
+        sleep(1); //så att min dator inte brinner upp
     }
 }
 
@@ -96,6 +98,9 @@ void *manageMail(void * u){
     mq_unlink(QUEUE_NAME);
     mqd_t mq;
     planet_type msg;
+    sem_t *sem_empty = sem_open(SEM_EMPTY, O_CREAT, 0644, BUFFER_SIZE);
+    sem_t *sem_full = sem_open(SEM_FULL, O_CREAT, 0644, 0);
+    sem_t *sem_mutex = sem_open(SEM_MUTEX, O_CREAT, 0644, 1);
     //try to open mailslot
     if(MQcreate(&mq, QUEUE_NAME) != 1){
         printf("SERVER: Could not create mailslot!\n");
@@ -110,12 +115,13 @@ void *manageMail(void * u){
     listArgs createPlanetArg;
     createPlanetArg.planetToCreate.name[0] = 0;
     createPlanetArg.headOfList = head;
-    createPlanetArg.number = 0;
 
     pthread_t pl;
     //Continously read mailslot
     int x = 0;
     while(1){
+        sem_wait(sem_full);
+        sem_wait(sem_mutex);
         if (MQread(&mq, (void*)&msg) >= 1){
             //x++;
             printf("SERVER: Request recieved, planet.name: %s\n", msg.name);
@@ -125,8 +131,10 @@ void *manageMail(void * u){
 
             pthread_create(&pl, NULL, (void *(*)(void *)) &planet, (void *)&createPlanetArg);
             //if(x == 3)
-            removeFromList((void *)&createPlanetArg);
+            //removeFromList((void *)&createPlanetArg);
         }
+        sem_post(sem_mutex);
+        sem_post(sem_empty);
     }
 }
 
@@ -213,4 +221,3 @@ int main(int argc, char *argv[]) //Main function
     gtk_main();//Call gtk_main which handles basic GUI functionality
     return 0;
 }
-

@@ -1,16 +1,19 @@
 #include "COMMON/wrapper.h"
 
-#define QUEUE_NAME "/mq1"
+//#define QUEUE_NAME "/mq1"
 
 int main()
 {
     //Implement you inter process communication here, happy coding
     planet_type planet;
     mqd_t mq;
-
+    sem_t *sem_empty = sem_open(SEM_EMPTY, 0);
+    sem_t *sem_full = sem_open(SEM_FULL, 0);
+    sem_t *sem_mutex = sem_open(SEM_MUTEX, 0);
+    int p;
     while(1){
         printf("---  Create Planet  ---\n");
-        printf("Name:\tx-pos\ty-pos\tx-vel\ty-vel\tlife\n");
+        printf("Name:\tx-pos\ty-pos\tx-vel\ty-vel\tmass\tlife\n");
         scanf("%s",  planet.name);
         scanf("%lf", &planet.sx);
         scanf("%lf", &planet.sy);
@@ -24,9 +27,13 @@ int main()
             printf("CLIENT: Could not connect!\n");
         }
         else{
+            sem_wait(sem_empty);
+            sem_wait(sem_mutex);
             printf("CLIENT: Connected!\n");
-            MQwrite(&mq, (void *)&planet);
+            p = MQwrite(&mq, (void *)&planet);
             printf("CLIENT: Request sent!\n");
+            sem_post(sem_mutex);
+            sem_post(sem_full);
         }
     }
 }
