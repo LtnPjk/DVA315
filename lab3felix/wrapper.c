@@ -1,6 +1,6 @@
 #include "wrapper.h"
 
-#define MAX_SIZE 1024
+#define MAX_SIZE 2000
 
 struct mq_attr attr;
 
