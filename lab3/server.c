@@ -3,6 +3,7 @@
 #include <pthread.h>
 #include "wrapper.h"
 #include <unistd.h>
+#include <math.h>
 /* #include "wrapper.c" */
 
 #define CYCLE_TIME 500
@@ -14,11 +15,15 @@ double G_CONST = 0.0000000000667259;
 planet_type * headGlob;
 static void do_drawing(cairo_t *);
 
+pthread_mutex_t mutex;
+
 int x = 0;
 int y = 0;
 int x2 = 0;
 GtkWidget *window;
 GtkWidget *darea;
+char life[] = "life";
+char position[] = "position";
 
 typedef struct arg_struct{
     planet_type planetToCreate;
@@ -32,12 +37,12 @@ void addToList(listArgs *planetArgs){
 
 
     while(tempo->next != NULL){
-        printf("NODE: %s\n", tempo->next->name);
+        /* printf("NODE: %s\n", tempo->next->name); */
         tempo = tempo->next;
     }
     planet_type *temp1 = malloc(sizeof(planet_type));
     if(temp1 == NULL){
-        printf("COULD NOT ALLOCATE MAMORY\n");
+        printf("COULD NOT ALLOCATE MaRmOrY\n");
         return;
     }
     *temp1 = args->planetToCreate;
@@ -58,7 +63,7 @@ void removeFromList(void *planetArgs) {
     }
     planet_type *temp1 = tempo->next;
     tempo->next = tempo->next->next;
-    printf("%s died in a horrible accident!\n", temp1->name);
+    /* printf("%s died in a horrible accident!\n", temp1->name); */
     free(temp1);
 }
 void printPlanet(planet_type *planet){
@@ -70,23 +75,78 @@ void *planet(listArgs *arguments){
     //while(1): calculate, update database
     //life = 0, call removeFromList()
 
+    sem_t *sem_empty2 = sem_open(SEM_EMPTY2, 0);
+    sem_t *sem_full2 = sem_open(SEM_FULL2, 0);
+    sem_t *sem_mutex2 = sem_open(SEM_MUTEX2, 0);
+
+    mqd_t mq1;
+    deathInfo dInfo;
+
     listArgs args;
     args.planetToCreate = arguments->planetToCreate;
     args.headOfList = arguments->headOfList;
     if(args.planetToCreate.name[0] != 0){
         printf("MY NAME IS: %s\n", args.planetToCreate.name);
+        pthread_mutex_lock(&mutex);
         addToList(&args);
+        pthread_mutex_unlock(&mutex);
 
     }
     else{
         printf("HEADNODE RECIEIIEVCJ\n");
     }
+    if(MQconnect(&mq1, args.planetPointer->pid) != 1){
+        printf("planet %s could not connect to server %s\n", args.planetPointer->name, args.planetPointer->pid);
+    }
+    else{
+        printf("planet %s connected to server %s\n", args.planetPointer->name, args.planetPointer->pid);
+    }
     while(1){
-        if(args.planetPointer->life <= 0 || !(0 < args.planetPointer->sx && args.planetPointer->sx < 1000) || !(0 < args.planetPointer->sy && args.planetPointer->sy < 1000)) { //dead planet condition
+        if(args.planetPointer->life <= 0) { //dead planet condition
+            strcpy(dInfo.name, args.planetPointer->name);
+            strcpy(dInfo.message, life);
+
+            sem_wait(sem_empty2);
+            sem_wait(sem_mutex2);
+
+            if(MQwrite(&mq1, &dInfo) == 0){
+                printf("planet %s could not write to server %s\n", args.planetPointer->name, args.planetPointer->pid);
+            }
+            else{
+                printf("planet %s wrote to server %s\n", args.planetPointer->name, args.planetPointer->pid);
+            }
+
+            sem_post(sem_mutex2);
+            sem_post(sem_full2);
+
+            pthread_mutex_lock(&mutex);
             removeFromList(&args);
+            pthread_mutex_unlock(&mutex);
             break;
         }
 
+        if(!(0 < args.planetPointer->sx && args.planetPointer->sx < 1000) || !(0 < args.planetPointer->sy && args.planetPointer->sy < 1000)){
+            strcpy(dInfo.name, args.planetPointer->name);
+            strcpy(dInfo.message, position);
+
+            sem_wait(sem_empty2);
+            sem_wait(sem_mutex2);
+
+            if(MQwrite(&mq1, &dInfo) == 0){
+                printf("planet %s could not write to server %s\n", args.planetPointer->name, args.planetPointer->pid);
+            }
+            else{
+                printf("planet %s wrote to server %s\n", args.planetPointer->name, args.planetPointer->pid);
+            }
+
+            sem_post(sem_mutex2);
+            sem_post(sem_full2);
+
+            pthread_mutex_lock(&mutex);
+            removeFromList(&args);
+            pthread_mutex_unlock(&mutex);
+            break;
+        }
         //Do calculations
         double ax = 0;
         double ay = 0;
@@ -118,6 +178,7 @@ void *planet(listArgs *arguments){
 
 planet_type * initList(){
     //Init database
+    pthread_mutex_init(&mutex, NULL);
     planet_type *head = NULL;
     planet_type *temp = (planet_type*)malloc(sizeof(planet_type));
 
@@ -257,12 +318,15 @@ static void do_drawing(cairo_t *cr) //Do the drawing against the cairo surface a
     //sleep(1);
     //Traverse linked list in database and call drawPlanet on each planet
     planet_type *temp = headGlob;
+    pthread_mutex_lock(&mutex);
     while(temp->next != NULL){
         //printf("DRAWING: %s\n", temp->next->name);
         drawPlanet(cr, temp->next);
         temp = temp->next;
         /* sleep(1); */
     }
+    pthread_mutex_unlock(&mutex);
+    usleep(200);
     /* drawPlanet(cr, &testPlanet); */
     /* //------------------------------------------Insert planet drawings Above------------------------------------------- */
 

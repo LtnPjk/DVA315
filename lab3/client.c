@@ -1,9 +1,38 @@
 #include "wrapper.h"
 
+mqd_t mq1;
+mqd_t mq2;
+
+void *death_server(char deathName[]){
+    sem_t *sem_empty2 = sem_open(SEM_EMPTY2, O_CREAT, 0644, BUFFER_SIZE);
+    sem_t *sem_full2 = sem_open(SEM_FULL2, O_CREAT, 0644, 0);
+    sem_t *sem_mutex2 = sem_open(SEM_MUTEX2, O_CREAT, 0644, 1);
+
+    if(MQcreate(&mq1, deathName) != 1){
+        printf("Could not create mailslot!\n");
+        return NULL;
+    }
+    /* printf("mailslot created!\n"); */
+    deathInfo dInfo;
+    while(1){
+        sem_wait(sem_full2);
+        sem_wait(sem_mutex2);
+        if(MQread(&mq1, (void **) &dInfo) >= 1){
+            printf("Planet %s died of %s\n", dInfo.name, dInfo.message);
+        }
+        sem_post(sem_mutex2);
+        sem_post(sem_full2);
+    }
+}
+
 int main()
 {
+    pthread_t deathServer;
     //Implement you inter process communication here, happy coding
     planet_type planet;
+
+    sprintf(planet.pid, "/%d", (int)pthread_self());
+    int ku = pthread_create(&deathServer, NULL, (void*(*)(void*)) death_server, planet.pid);
 
     planet_type P1;
     strcpy(P1.name, "P1");
@@ -23,8 +52,6 @@ int main()
     P2.vx = 0.000;
     P2.vy = 0.008;
 
-    int garb = 1;
-
     mqd_t mq;
 
     sem_t *sem_empty = sem_open(SEM_EMPTY, 0);
@@ -43,14 +70,14 @@ int main()
         scanf("%d", &planet.life);
         printf("Spawning planet...\n");
 
-        if(MQconnect(&mq, QUEUE_NAME) != 1){
+        if(MQconnect(&mq2, QUEUE_NAME) != 1){
             printf("CLIENT: Could not connect!\n");
         }
         else{
             sem_wait(sem_empty);
             sem_wait(sem_mutex);
             printf("CLIENT: Connected!\n");
-            p = MQwrite(&mq, (void *)&planet);
+            p = MQwrite(&mq2, (void *)&planet);
             /* if(garb == 1) */
             /*     MQwrite(&mq, (void*)&P1); */
             /* if(garb == 2) */
@@ -62,6 +89,5 @@ int main()
             sem_post(sem_mutex);
             sem_post(sem_full);
         }
-        scanf("%d", &garb);
     }
 }

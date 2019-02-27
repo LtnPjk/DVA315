@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ltnpjk/github/DVA315/lab3
+CMAKE_SOURCE_DIR = /home/ltnpjk/Documents/Github/DVA315/lab3
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ltnpjk/github/DVA315/lab3
+CMAKE_BINARY_DIR = /home/ltnpjk/Documents/Github/DVA315/lab3
 
 #=============================================================================
 # Target rules for target CMakeFiles/RUN_SERVER.dir
@@ -66,7 +66,7 @@ CMAKE_BINARY_DIR = /home/ltnpjk/github/DVA315/lab3
 CMakeFiles/RUN_SERVER.dir/all:
 	$(MAKE) -f CMakeFiles/RUN_SERVER.dir/build.make CMakeFiles/RUN_SERVER.dir/depend
 	$(MAKE) -f CMakeFiles/RUN_SERVER.dir/build.make CMakeFiles/RUN_SERVER.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ltnpjk/github/DVA315/lab3/CMakeFiles --progress-num=4,5,6 "Built target RUN_SERVER"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ltnpjk/Documents/Github/DVA315/lab3/CMakeFiles --progress-num=4,5,6 "Built target RUN_SERVER"
 .PHONY : CMakeFiles/RUN_SERVER.dir/all
 
 # Include target in all.
@@ -76,9 +76,9 @@ all: CMakeFiles/RUN_SERVER.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/RUN_SERVER.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ltnpjk/github/DVA315/lab3/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ltnpjk/Documents/Github/DVA315/lab3/CMakeFiles 3
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/RUN_SERVER.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ltnpjk/github/DVA315/lab3/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ltnpjk/Documents/Github/DVA315/lab3/CMakeFiles 0
 .PHONY : CMakeFiles/RUN_SERVER.dir/rule
 
 # Convenience name for target.
@@ -103,7 +103,7 @@ clean: CMakeFiles/RUN_SERVER.dir/clean
 CMakeFiles/RUN_CLIENT.dir/all:
 	$(MAKE) -f CMakeFiles/RUN_CLIENT.dir/build.make CMakeFiles/RUN_CLIENT.dir/depend
 	$(MAKE) -f CMakeFiles/RUN_CLIENT.dir/build.make CMakeFiles/RUN_CLIENT.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ltnpjk/github/DVA315/lab3/CMakeFiles --progress-num=1,2,3 "Built target RUN_CLIENT"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ltnpjk/Documents/Github/DVA315/lab3/CMakeFiles --progress-num=1,2,3 "Built target RUN_CLIENT"
 .PHONY : CMakeFiles/RUN_CLIENT.dir/all
 
 # Include target in all.
@@ -113,9 +113,9 @@ all: CMakeFiles/RUN_CLIENT.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/RUN_CLIENT.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ltnpjk/github/DVA315/lab3/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ltnpjk/Documents/Github/DVA315/lab3/CMakeFiles 3
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/RUN_CLIENT.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ltnpjk/github/DVA315/lab3/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ltnpjk/Documents/Github/DVA315/lab3/CMakeFiles 0
 .PHONY : CMakeFiles/RUN_CLIENT.dir/rule
 
 # Convenience name for target.

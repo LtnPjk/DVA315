@@ -28,6 +28,10 @@ extern int MQwrite (mqd_t * mq, void * data);
 #define SEM_FULL "semfull"
 #define SEM_MUTEX "semmutex"
 #define QUEUE_NAME "/mq1"
+#define SEM_EMPTY2 "semempty23"
+#define SEM_FULL2 "semfull23"
+#define SEM_MUTEX2 "semmutex23"
+
 
 // Struct for planet data will be used in lab 2 and 3 !!!!!
 // Just ignore in lab1 or you can try to send it on your mailslot,
@@ -52,5 +56,10 @@ typedef struct pt {
     vector2D    points[50];
     double      mult;
 } planet_type;
+
+typedef struct death{
+    char name[20];
+    char message[20];
+}deathInfo;
 
 #endif /* WRAPPER_H */

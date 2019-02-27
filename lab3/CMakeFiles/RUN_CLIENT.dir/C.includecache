@@ -6,17 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/home/ltnpjk/github/DVA315/lab3/client.c
+/home/ltnpjk/Documents/Github/DVA315/lab3/client.c
 wrapper.h
-/home/ltnpjk/github/DVA315/lab3/wrapper.h
+/home/ltnpjk/Documents/Github/DVA315/lab3/wrapper.h
 
-/home/ltnpjk/github/DVA315/lab3/wrapper.c
+/home/ltnpjk/Documents/Github/DVA315/lab3/wrapper.c
 wrapper.h
-/home/ltnpjk/github/DVA315/lab3/wrapper.h
+/home/ltnpjk/Documents/Github/DVA315/lab3/wrapper.h
 semaphore.h
 -
 
-/home/ltnpjk/github/DVA315/lab3/wrapper.h
+/home/ltnpjk/Documents/Github/DVA315/lab3/wrapper.h
 stdlib.h
 -
 stdio.h
