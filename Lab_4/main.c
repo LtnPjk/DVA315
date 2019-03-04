@@ -20,7 +20,7 @@
 #define sched_MQ 3
 
 #define QUEUE_SIZE 10
-int sched_type = sched_RR;
+int sched_type = sched_SJF;
 int finished = 0;
 int context_switch_program_exit = 0;
 int context_switch = 0;
@@ -213,6 +213,26 @@ task * first_to_last (task * head)
 	return new_front;
 
 }
+
+task * last_to_first (task * head)
+{
+    if( head == NULL)
+        return NULL;
+    if( head->next == NULL)
+        return head;
+
+    //task * new_front = head;
+    task * cursor = head;
+    task * previous = NULL;
+    while(cursor->next != NULL){
+        previous = cursor;
+        cursor = cursor->next;
+    }
+    cursor->next = head;
+    previous->next = NULL;
+    head = cursor;
+    return head;
+}
 //------------------Reads a taskset from file and inserts them to ready queue------------------
 void readTaskset_n(char * filepath)
 {
@@ -267,10 +287,30 @@ task * scheduler_n()
 		{
 			return ready_queue;
 		}
+
+
 		if (sched_type == sched_SJF) 		//Here is where you implement your EDF scheduling algorithm
 		{
+            task * temp = ready_queue;
+            task * toMove = ready_queue;
+
+            while(temp->next != NULL){
+                if(temp->next->quantum < temp->quantum){
+                    toMove = temp->next;
+                }
+                temp = temp->next;
+            }
+            task temptask = *toMove;
+            ready_queue = remove_node(ready_queue, toMove);
+            ready_queue = push(ready_queue, temptask);
+            printf("...........\n");
+            //sleep(2);
+            ready_queue = last_to_first(ready_queue);
+            //printf("%d", ready_queue->ID);
 			return ready_queue;
 		}
+
+
 		if (sched_type == sched_MQ) 		//Here is where you implement your MQ scheduling algorithm,
 		{
 			return ready_queue;
