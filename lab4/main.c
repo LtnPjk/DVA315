@@ -107,32 +107,40 @@ task* create(int ID, int deadline, int release_time, int period, int prio, int q
 }
 
 task * addNode(task * head, task input){
+    printf("sdjgmksdg\n");
     int prio = input.priority;
+    if(head == NULL){
+        printf("WTF HEAD IS EMPTY!\t\t");
+    }
     task * current = head;
-    if(head->next == NULL){
-        return NULL;
-    }
-    if(prio >= 2 && prio <= 3){
-        while(current->next != NULL && current->next->priority < 4){
-            current = current->next;
+    if(head->next != NULL){
+        if(prio >= 2 && prio <= 3){
+            printf("QUEUE 2\t\t");
+            while(current->next != NULL && current->next->priority < 4){
+                current = current->next;
+            }
+        }
+        else if(prio >= 4 && prio < 8){
+            printf("QUEUE 3\t\t");
+            while(current->next != NULL && current->next->priority < 9){
+                current = current->next;
+            }
+        }
+        else if(prio >= 8){
+            printf("pwoefk\n");
+            while(current->next != NULL){
+                printf("hello\n");
+                current = current->next;
+            }
         }
     }
-    else if(prio >= 4 && prio < 8){
-        while(current->next != NULL && current->next->priority < 9){
-            current = current->next;
-        }
-    }
-    else if(prio >= 8){
-        printf("pwoefk\n");
-        while(current->next != NULL){
-            printf("hello\n");
-            current = current->next;
-        }
-    }
+    else
+        printf("CANVCER I ;MASIMAI\n");
     task * temp = create(input.ID, input.deadline, input.release_time, input.period, input.priority, input.quantum, NULL);
     task * temp2 = current->next;
     current->next = temp;
     temp->next = temp2;
+    printf("5\n");
 
 }
 
@@ -352,11 +360,20 @@ task * scheduler_n()
 
 		if (sched_type == sched_MQ) 		//Here is where you implement your MQ scheduling algorithm,
 		{
-            task executed_task = *ready_queue;
-            ready_queue = pop(ready_queue);
-            executed_task.priority++;
+            //task executed_task = *ready_queue;
+            //ready_queue = pop(ready_queue);
+            //executed_task.priority++;
             //printf("----- ++ -----");
-            addNode(ready_queue, executed_task);
+            task * tempHead = ready_queue;
+            while(tempHead->next != NULL){
+                tempHead = tempHead->next;
+            }
+            tempHead->priority++;
+            task localTemp = *tempHead;
+            if(ready_queue != tempHead){
+                ready_queue = remove_back(ready_queue);
+                addNode(ready_queue, localTemp);
+            }
 
 			return ready_queue;
 		}
@@ -421,7 +438,7 @@ int main(int argc, char **argv)
 		dispatch_n(task_to_be_run);			//Dispatch the task to be run
 		OS_cycles++;						//Increment OS clock
         printf("%d - ", OS_cycles);
-		usleep(500000);					//Sleep so we dont get overflown with output
+		usleep(100000);					//Sleep so we dont get overflown with output
 	}
 }
 
