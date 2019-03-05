@@ -52,15 +52,6 @@ int idleTasks = 0;
 
 //Implementera insertfunktioner
 
-task * addNode(task * head, task task){
-    int prio = head->priority;
-    //task * current;
-    //current = head;
-
-    //while();
-
-
-}
 
 task * last_to_first (task * head)
 {
@@ -114,6 +105,42 @@ task* create(int ID, int deadline, int release_time, int period, int prio, int q
     new_node->next = next;
     return new_node;
 }
+
+task * addNode(task * head, task input){
+    int prio = head->priority;
+    task * current = head;
+    if(head->next == NULL){
+        return NULL;
+    }
+
+    if(prio >= 2 && prio <= 3){
+        while(!(current->next->priority >= 4)){
+            current = current->next;
+            if(current->next == NULL){
+                break;
+            }
+        }
+    }
+    else if(prio >= 4 && prio < 8){
+        while(!(current->next->priority >= 9)){
+            current = current->next;
+            if(current->next == NULL){
+                break;
+            }
+        }
+    }
+    else if(prio >= 8){
+        while(current->next != NULL){
+            current = current->next;
+        }
+    }
+    task * temp = create(input.ID, input.deadline, input.release_time, input.period, input.priority, input.quantum, NULL);
+    task * temp2 = current->next;
+    current->next = temp;
+    temp->next = temp2;
+
+}
+
 task * push(task * head, task data)			//Appends a task to a list
 {
     /* go to the last node */
