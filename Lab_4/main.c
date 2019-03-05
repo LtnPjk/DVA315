@@ -52,6 +52,16 @@ int idleTasks = 0;
 
 //Implementera insertfunktioner
 
+task * addNode(task * head, task task){
+    int prio = head->priority;
+    //task * current;
+    //current = head;
+
+    //while();
+
+
+}
+
 task * last_to_first (task * head)
 {
     if( head == NULL)
