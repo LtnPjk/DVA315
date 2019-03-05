@@ -20,7 +20,7 @@
 #define sched_MQ 3
 
 #define QUEUE_SIZE 10
-int sched_type = sched_SJF;
+int sched_type = sched_MQ;
 int finished = 0;
 int context_switch_program_exit = 0;
 int context_switch = 0;
@@ -107,30 +107,25 @@ task* create(int ID, int deadline, int release_time, int period, int prio, int q
 }
 
 task * addNode(task * head, task input){
-    int prio = head->priority;
+    int prio = input.priority;
     task * current = head;
     if(head->next == NULL){
         return NULL;
     }
-
     if(prio >= 2 && prio <= 3){
-        while(!(current->next->priority >= 4)){
+        while(current->next != NULL && current->next->priority < 4){
             current = current->next;
-            if(current->next == NULL){
-                break;
-            }
         }
     }
     else if(prio >= 4 && prio < 8){
-        while(!(current->next->priority >= 9)){
+        while(current->next != NULL && current->next->priority < 9){
             current = current->next;
-            if(current->next == NULL){
-                break;
-            }
         }
     }
     else if(prio >= 8){
+        printf("pwoefk\n");
         while(current->next != NULL){
+            printf("hello\n");
             current = current->next;
         }
     }
@@ -139,6 +134,19 @@ task * addNode(task * head, task input){
     current->next = temp;
     temp->next = temp2;
 
+}
+
+task * traverseList(task * head, int prio){
+    task * current = head;
+    if(current == NULL){
+        return NULL;
+    }
+    printf("\n");
+    while(current->next != NULL && current->next->priority < prio){
+        printf("TASK: %d WITH PRIO: %d\n", current->ID, current->priority);
+        current = current->next;
+    }
+    return current;
 }
 
 task * push(task * head, task data)			//Appends a task to a list
@@ -345,8 +353,9 @@ task * scheduler_n()
 		if (sched_type == sched_MQ) 		//Here is where you implement your MQ scheduling algorithm,
 		{
             task executed_task = *ready_queue;
-            pop(ready_queue);
+            ready_queue = pop(ready_queue);
             executed_task.priority++;
+            //printf("----- ++ -----");
             addNode(ready_queue, executed_task);
 
 			return ready_queue;
@@ -411,7 +420,8 @@ int main(int argc, char **argv)
 		task_to_be_run = scheduler_n();		//Fetch the task to be run
 		dispatch_n(task_to_be_run);			//Dispatch the task to be run
 		OS_cycles++;						//Increment OS clock
-		usleep(1000000);					//Sleep so we dont get overflown with output
+        printf("%d - ", OS_cycles);
+		usleep(500000);					//Sleep so we dont get overflown with output
 	}
 }
 
