@@ -34,7 +34,7 @@ typedef struct taskprop{
     int priority;		//Priority of task, can be used for the multiple queues
     int ID;			//ID, to distinguish different tasks from eachother
     int quantum;		//How long the task has left to execute
-    int queue_size;
+    int queue_size;		
     struct taskprop * next;
     struct taskprop * previous;
 } task;
@@ -52,35 +52,9 @@ int idleTasks = 0;
 
 //Implementera insertfunktioner
 
-task * addNode(task * head, task task){
-    int prio = head->priority;
-    //task * current;
-    //current = head;
-
-    //while();
 
 
-}
 
-task * last_to_first (task * head)
-{
-    if( head == NULL)
-        return NULL;
-    if( head->next == NULL)
-        return head;
-
-    //task * new_front = head;
-    task * cursor = head;
-    task * previous = NULL;
-    while(cursor->next != NULL){
-        previous = cursor;
-        cursor = cursor->next;
-    }
-    cursor->next = head;
-    previous->next = NULL;
-    head = cursor;
-    return head;
-}
 
 //------------------Linked list functions------------------
 void copy_task(task ** dest, task * src)		//Copies data of a task to another task
@@ -240,6 +214,25 @@ task * first_to_last (task * head)
 
 }
 
+task * last_to_first (task * head)
+{
+    if( head == NULL)
+        return NULL;
+    if( head->next == NULL)
+        return head;
+
+    //task * new_front = head;
+    task * cursor = head;
+    task * previous = NULL;
+    while(cursor->next != NULL){
+        previous = cursor;
+        cursor = cursor->next;
+    }
+    cursor->next = head;
+    previous->next = NULL;
+    head = cursor;
+    return head;
+}
 //------------------Reads a taskset from file and inserts them to ready queue------------------
 void readTaskset_n(char * filepath)
 {
@@ -310,18 +303,16 @@ task * scheduler_n()
             task temptask = *toMove;
             ready_queue = remove_node(ready_queue, toMove);
             ready_queue = push(ready_queue, temptask);
+            printf("...........\n");
+            //sleep(2);
             ready_queue = last_to_first(ready_queue);
+            //printf("%d", ready_queue->ID);
 			return ready_queue;
 		}
 
 
 		if (sched_type == sched_MQ) 		//Here is where you implement your MQ scheduling algorithm,
 		{
-            task executed_task = *ready_queue;
-            pop(ready_queue);
-            executed_task.priority++;
-            addNode(ready_queue, executed_task);
-
 			return ready_queue;
 		}
 	}
