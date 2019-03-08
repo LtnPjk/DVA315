@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-I.
 DEPS = wrapper.h
-OBJ = main.o wrapper.o 
+OBJ = main.o 
 LIBS+=-pthread
 LIBS+=-lrt
 

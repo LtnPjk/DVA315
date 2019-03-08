@@ -3,7 +3,7 @@
 
 typedef struct {
     int page;       // page stored in this memory frame
-    int time;       // Time stamp of page stored in this memory frame
+    float time;       // Time stamp of page stored in this memory frame
     int free;       // Indicates if frame is free or not
                     // Add own data if needed for FIFO, OPT, LFU, Own algorithm
 } frameType;
@@ -75,10 +75,10 @@ void printResultOfReference (int no_of_frames, frameType frames[], int pf_flag, 
 //----------- Finds the position in memory to evict in case of page fault and no free memory location ---------------------------------------------
 
 int findPageToEvict(frameType frames[], int n) {   // LRU eviction strategy -- This is what you are supposed to change in the lab for LFU and OPT
-    int i, minimum = frames[0].time, pos = 0;
-    
+    int i, /*minimum = frames[0].time,*/ pos = 0;
+    float minimum = frames[0].time;
     for(i = 1; i < n; ++i) {
-        if(frames[i].time < minimum){               // Find the page position with minimum time stamp among all frames
+        if(frames[i].time >= minimum){               // Find the page position with minimum time stamp among all frames
             minimum = frames[i].time;
             pos = i;
         }
