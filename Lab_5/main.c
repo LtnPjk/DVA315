@@ -5,7 +5,7 @@
 #define LFU 3
 #define OPT 4
 
-int ALGORITHM = FIFO;
+int ALGORITHM = LFU;
 
 typedef struct {
     int page;       // page stored in this memory frame
@@ -13,6 +13,7 @@ typedef struct {
     int free;       // Indicates if frame is free or not
                     // Add own data if needed for FIFO, OPT, LFU, Own algorithm
     int timeSinceSwitch;
+    int timesUsed;
 } frameType;
 
 //---------------------- Initializes by reading stuff from file and inits all frames as free -----------------------------------------------------------
@@ -42,6 +43,7 @@ void initilize (int *no_of_frames, int *no_of_references, int refs[], frameType 
     for(i = 0; i < *no_of_frames; ++i) {
         frames[i].free = 1;                         // Indicates a free frame in memory
         frames[i].timeSinceSwitch = 0;
+        frames[i].timesUsed = 0;
     }
 
     printf("\nPages in memory:\t");                 // Print header with frame numbers
@@ -87,7 +89,7 @@ int findPageToEvict(frameType frames[], int n) {   // LRU eviction strategy -- T
         int i, minimum = frames[0].time, pos = 0;
 
         for(i = 1; i < n; ++i) {
-            if(frames[i].time > minimum){               // Find the page position with minimum time stamp among all frames
+            if(frames[i].time < minimum){               // Find the page position with minimum time stamp among all frames
                 minimum = frames[i].time;
                 pos = i;
             }
@@ -107,7 +109,15 @@ int findPageToEvict(frameType frames[], int n) {   // LRU eviction strategy -- T
         return pos;
     }
     else if(ALGORITHM == 3){
+        int i, minimum = frames[0].timesUsed, pos = 0;
 
+        for(i = 1; i < n; ++i){
+            if(frames[i].timesUsed < minimum){
+                minimum = frames[i].timesUsed;
+                pos = i;
+            }
+        }
+        return pos;
     }
     else if(ALGORITHM == 4){
 
@@ -129,11 +139,12 @@ int main()
             if(frames[j].page == refs[i]) {         // Accessed ref is in memory
                 counter++;
                 frames[j].time = counter;           // Update the time stamp for this frame
+                frames[j].timesUsed++;
                 page_fault_flag = no_free_mem_flag = 1; // Indicate no page fault (no page fault and no free memory frame needed)
                 free = -1;                          // Indicate no free mem frame needed (reporting purposes)
                 break;
             }
-            frames[j].timeSinceSwitch++;
+            frames[j].timeSinceSwitch++;            // Increments the time that a specific page has used frame[j]
         }
 
         if(page_fault_flag == 0) {                   // We have a page fault
@@ -144,7 +155,8 @@ int main()
                     frames[j].page= refs[i];        // Update memory frame with referenced page
                     frames[j].time = counter;       // Update the time stamp for this frame
                     frames[j].free = 0;             // This frame is no longer free
-                    frames[j].timeSinceSwitch = 0;
+                    frames[j].timeSinceSwitch = 0;  // Resets the time since last switched
+                    frames[j].timesUsed++;
                     no_free_mem_flag = 1;           // Indicate that we do not need to replace since free frame was found
                     free = j;                       // Inicate that we found position j as free (reporting purposes)
                     break;
@@ -158,7 +170,8 @@ int main()
             faults++;
             frames[pos].page = refs[i];             // Update memory frame at position pos with referenced page
             frames[pos].time = counter;             // Update the time stamp for this frame
-            frames[pos].timeSinceSwitch = 0;
+            frames[pos].timeSinceSwitch = 0;        // Resets the time since last switched
+            frames[pos].timesUsed++;
         }
         printResultOfReference (no_of_frames, frames, page_fault_flag, no_free_mem_flag, pos, free, refs[i]); // Print result of referencing ref[i]
     }
