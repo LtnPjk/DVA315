@@ -12,8 +12,9 @@ typedef struct {
     int time;       // Time stamp of page stored in this memory frame
     int free;       // Indicates if frame is free or not
                     // Add own data if needed for FIFO, OPT, LFU, Own algorithm
-    int timeSinceSwitch;
-    int timesUsed;
+    int timeSinceSwitch; // time since frame switched
+    int timesUsed;       // times a frame has been used
+    int timeToNext;      // time untill frame will be used in current state
 } frameType;
 
 //---------------------- Initializes by reading stuff from file and inits all frames as free -----------------------------------------------------------
@@ -85,7 +86,8 @@ void printResultOfReference (int no_of_frames, frameType frames[], int pf_flag, 
 //----------- Finds the position in memory to evict in case of page fault and no free memory location ---------------------------------------------
 
 int findPageToEvict(frameType frames[], int n) {   // LRU eviction strategy -- This is what you are supposed to change in the lab for LFU and OP
-    if(ALGORITHM == 1){
+
+    if(ALGORITHM == 1){         //LRU
         int i, minimum = frames[0].time, pos = 0;
 
         for(i = 1; i < n; ++i) {
@@ -94,10 +96,10 @@ int findPageToEvict(frameType frames[], int n) {   // LRU eviction strategy -- T
                 pos = i;
             }
         }
-//        printf("F%d-T%d\n", pos, minimum);
         return pos;                // Return that position
     }
-    else if(ALGORITHM == 2){
+
+    else if(ALGORITHM == 2){    //FIFO
         int i, maximum = frames[0].timeSinceSwitch, pos = 0;
 
         for(i = 1; i < n; ++i){
@@ -108,7 +110,8 @@ int findPageToEvict(frameType frames[], int n) {   // LRU eviction strategy -- T
         }
         return pos;
     }
-    else if(ALGORITHM == 3){
+
+    else if(ALGORITHM == 3){    //LFU
         int i, minimum = frames[0].timesUsed, pos = 0;
 
         for(i = 1; i < n; ++i){
@@ -119,14 +122,36 @@ int findPageToEvict(frameType frames[], int n) {   // LRU eviction strategy -- T
         }
         return pos;
     }
-    else if(ALGORITHM == 4){
+
+    else if(ALGORITHM == 4){    //OPT
 
     }
 }
 
+void printAlgorithm(){
+    if(ALGORITHM == 1){
+        printf("-------LRU-------\n");
+    }
+    else if(ALGORITHM == 2){
+        printf("-------FIFO------\n");
+    }
+    else if(ALGORITHM == 3){
+        printf("-------LFU-------\n");
+    }
+    else if(ALGORITHM == 4){
+        printf("-------OPT-------\n");
+    }
+
+}
+
+int time_to_next(frameType frame, int refs[]){
+    int i, number = frame.page;
+
+}
 //---- Main loops ref string, for each ref 1) check if ref is in memory, 2) if not, check if there is free frame, 3) if not, find a page to evict --
 int main()
 {
+    printAlgorithm();
     int no_of_frames, no_of_references, refs[100], counter = 0, page_fault_flag, no_free_mem_flag, i, j, pos = 0, faults = 0, free = 0;
     frameType frames[20];
 
@@ -139,7 +164,7 @@ int main()
             if(frames[j].page == refs[i]) {         // Accessed ref is in memory
                 counter++;
                 frames[j].time = counter;           // Update the time stamp for this frame
-                frames[j].timesUsed++;
+                frames[j].timesUsed++;              // Increments the times a frame has been used
                 page_fault_flag = no_free_mem_flag = 1; // Indicate no page fault (no page fault and no free memory frame needed)
                 free = -1;                          // Indicate no free mem frame needed (reporting purposes)
                 break;
@@ -147,16 +172,16 @@ int main()
             frames[j].timeSinceSwitch++;            // Increments the time that a specific page has used frame[j]
         }
 
-        if(page_fault_flag == 0) {                   // We have a page fault
+        if(page_fault_flag == 0) {                  // We have a page fault
             for(j = 0; j < no_of_frames; ++j) {     // Loop over memory
-                if(frames[j].free == 1) {            // Do we have a free frame
+                if(frames[j].free == 1) {           // Do we have a free frame
                     counter++;
                     faults++;
                     frames[j].page= refs[i];        // Update memory frame with referenced page
                     frames[j].time = counter;       // Update the time stamp for this frame
                     frames[j].free = 0;             // This frame is no longer free
                     frames[j].timeSinceSwitch = 0;  // Resets the time since last switched
-                    frames[j].timesUsed++;
+                    frames[j].timesUsed++;          // Increments the times a frame has been used
                     no_free_mem_flag = 1;           // Indicate that we do not need to replace since free frame was found
                     free = j;                       // Inicate that we found position j as free (reporting purposes)
                     break;
@@ -171,7 +196,7 @@ int main()
             frames[pos].page = refs[i];             // Update memory frame at position pos with referenced page
             frames[pos].time = counter;             // Update the time stamp for this frame
             frames[pos].timeSinceSwitch = 0;        // Resets the time since last switched
-            frames[pos].timesUsed++;
+            frames[pos].timesUsed++;                // Increments the times a frame has been used
         }
         printResultOfReference (no_of_frames, frames, page_fault_flag, no_free_mem_flag, pos, free, refs[i]); // Print result of referencing ref[i]
     }
