@@ -5,7 +5,7 @@
 #define LFU 3
 #define OPT 4
 
-int ALGORITHM = LFU;
+int ALGORITHM = OPT;
 
 typedef struct {
     int page;       // page stored in this memory frame
@@ -85,12 +85,12 @@ void printResultOfReference (int no_of_frames, frameType frames[], int pf_flag, 
 
 //----------- Finds the position in memory to evict in case of page fault and no free memory location ---------------------------------------------
 
-int findPageToEvict(frameType frames[], int n) {   // LRU eviction strategy -- This is what you are supposed to change in the lab for LFU and OP
+int findPageToEvict(frameType frames[], int n, int refs[], int counter, int no_of_references) {   // LRU eviction strategy -- This is what you are supposed to change in the lab for LFU and OP
 
     if(ALGORITHM == 1){         //LRU
         int i, minimum = frames[0].time, pos = 0;
 
-        for(i = 1; i < n; ++i) {
+        for(i = 0; i < n; ++i) {
             if(frames[i].time < minimum){               // Find the page position with minimum time stamp among all frames
                 minimum = frames[i].time;
                 pos = i;
@@ -102,7 +102,7 @@ int findPageToEvict(frameType frames[], int n) {   // LRU eviction strategy -- T
     else if(ALGORITHM == 2){    //FIFO
         int i, maximum = frames[0].timeSinceSwitch, pos = 0;
 
-        for(i = 1; i < n; ++i){
+        for(i = 0; i < n; ++i){
             if(frames[i].timeSinceSwitch > maximum){
                 maximum = frames[i].timeSinceSwitch;
                 pos = i;
@@ -124,6 +124,23 @@ int findPageToEvict(frameType frames[], int n) {   // LRU eviction strategy -- T
     }
 
     else if(ALGORITHM == 4){    //OPT
+        int i, j, page, k, max = 0, pos = 0;
+        for(i = 0; i < n; ++i){
+            page = frames[i].page;
+            for(j = counter; j < no_of_references; ++j){
+                if(refs[j] == page){
+                    k = j - counter;
+                    break;
+                }
+                k = 0;
+            }
+            if(k > max){
+                max = k;
+                pos = i;
+            }
+            printf(" -%d- ", max);
+        }
+        return pos;
 
     }
 }
@@ -190,7 +207,7 @@ int main()
         }
 
         if(no_free_mem_flag == 0) {                 // Page fault and memory is full, we need to know what page to evict
-            pos = findPageToEvict(frames, no_of_frames); // Get memory position to evict among all frames
+            pos = findPageToEvict(frames, no_of_frames, refs, counter, no_of_references); // Get memory position to evict among all frames
             counter++;
             faults++;
             frames[pos].page = refs[i];             // Update memory frame at position pos with referenced page
