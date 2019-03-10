@@ -106,6 +106,35 @@ task* create(int ID, int deadline, int release_time, int period, int prio, int q
     return new_node;
 }
 
+<<<<<<< HEAD
+=======
+task * addNode(task * head, task input){
+    int prio = input.priority;
+    task * current = head;
+    if(head->next != NULL){
+        if(prio >= 2 && prio <= 3){
+            while(current->next != NULL && current->next->priority < 4){
+                current = current->next;
+            }
+        }
+        else if(prio >= 4 && prio < 8){
+            while(current->next != NULL && current->next->priority < 9){
+                current = current->next;
+            }
+        }
+        else if(prio >= 8){
+            while(current->next != NULL){
+                current = current->next;
+            }
+        }
+    }
+    task * temp = create(input.ID, input.deadline, input.release_time, input.period, input.priority, input.quantum, NULL);
+    task * temp2 = current->next;
+    current->next = temp;
+    temp->next = temp2;
+}
+
+>>>>>>> feff328ec2f55719a53cafe37df2482a1271bfb5
 task * push(task * head, task data)			//Appends a task to a list
 {
     /* go to the last node */
@@ -337,6 +366,7 @@ task * scheduler_n()
 
 		if (sched_type == sched_MQ) 		//Here is where you implement your MQ scheduling algorithm,
 		{
+<<<<<<< HEAD
             //save head node for comparison
             //traverse list and compare each node_prio to saved node_prio
             //when end of list is reached, move saved node to front
@@ -349,6 +379,17 @@ task * scheduler_n()
             while(taskTemp->next != NULL){
                 taskTemp = taskTemp->next;
                 taskToRun = nodeCompare(taskToRun, taskTemp);
+=======
+            task * tempHead = ready_queue;
+            while(tempHead->next != NULL){
+                tempHead = tempHead->next;
+            }
+            tempHead->priority++;
+            task localTemp = *tempHead;
+            if(ready_queue != tempHead){
+                ready_queue = remove_back(ready_queue);
+                addNode(ready_queue, localTemp);
+>>>>>>> feff328ec2f55719a53cafe37df2482a1271bfb5
             }
 
             taskToRun->priority++;
@@ -386,14 +427,14 @@ void dispatch_n(task * exec)
 		}
 		else
 		{
-			printf("Task %d is executing with %d quanta left - Total context switches: %d \n", exec->ID, exec->quantum, context_switches);	//Printout task info
+			printf("Task %d is executing with %d quanta left -\tTotal context switches: %d \n", exec->ID, exec->quantum, context_switches);	//Printout task info
 		}
 
 
 	}
 	else
 	{
-		printf("Task %d has executed and finished its quanta - Total context switches: %d \n", exec->ID, context_switches);	//Printout task info
+		printf("Task %d has executed and finished its quanta -Total context switches: %d \n", exec->ID, context_switches);	//Printout task info
 		ready_queue->release_time = ready_queue->release_time+ready_queue->period;
 		waiting_queue=push(waiting_queue, *ready_queue); 			//Add the finished task to the waiting queue
 		ready_queue=pop(ready_queue); 						//Pop the finished task from ready queue
@@ -419,7 +460,7 @@ int main(int argc, char **argv)
 		task_to_be_run = scheduler_n();		//Fetch the task to be run
 		dispatch_n(task_to_be_run);			//Dispatch the task to be run
 		OS_cycles++;						//Increment OS clock
-        printf("%d - ", OS_cycles);
+        printf("%d\t", OS_cycles);
 		usleep(100000);					//Sleep so we dont get overflown with output
 	}
 }
