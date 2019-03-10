@@ -277,34 +277,22 @@ void OS_wakeup_n()
 	}
 }
 
-task * nodeCompare(task *task1, task *task2){
-    //compare prio of nodes, return node to run first
-    //queue_breaks: 2, 4, 8 (?)
-
-    task *taskToReturn;
-    /* printf("CHECK 1\n"); */
-    taskToReturn = task1;
-    if(task1->priority == 1){
-        if(task2->priority > 1 && task2->priority <=7 && task2->priority != 2 && task2->priority != 4){
-            taskToReturn = task2;
-        }
-    }
-    if(task1->priority == 2){
-        if(task2->priority == 1 || task2->priority == 3){
-            taskToReturn = task2;
-        }
-    }
-    /* printf("CHECK 2\n"); */
-    if(task1->priority == 4){
-        if(task2->priority <= 7 && task2->priority != 4){
-            taskToReturn = task2;
-        }
-    }
-    /* printf("Node1: %d %d\tNode2: %d %d\t Result:%d\t\n", task1->ID, task1->priority, task2->ID, task2->priority, taskToReturn->ID); */
-    return taskToReturn;
-
+int middleOfQueue(task *taskArg){
+    // return 1 if task is in middle of queue, return 0 otherwise
+    int x = taskArg->priority;
+    if(!(x == 1 || x == 2 || x == 4 || x == 7))
+        return 1;
+    return 0;
 }
-
+task * nodeCompare(task *task1, task *task2){
+    if(middleOfQueue(task1) == 1)
+        return task1;
+    if(middleOfQueue(task2) == 1)
+        return task2;
+    if(task1->priority <= task2->priority)
+        return task1;
+    return task2;
+}
 //------------------Scheduler, returns the task to be executed ------------------
 task * scheduler_n()
 {
@@ -337,10 +325,6 @@ task * scheduler_n()
 
 		if (sched_type == sched_MQ) 		//Here is where you implement your MQ scheduling algorithm,
 		{
-            //save head node for comparison
-            //traverse list and compare each node_prio to saved node_prio
-            //when end of list is reached, move saved node to front
-
             task * taskToRun;
             taskToRun = ready_queue;
             task * taskTemp;
