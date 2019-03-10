@@ -106,57 +106,6 @@ task* create(int ID, int deadline, int release_time, int period, int prio, int q
     return new_node;
 }
 
-task * addNode(task * head, task input){
-    printf("sdjgmksdg\n");
-    int prio = input.priority;
-    if(head == NULL){
-        printf("WTF HEAD IS EMPTY!\t\t");
-    }
-    task * current = head;
-    if(head->next != NULL){
-        if(prio >= 2 && prio <= 3){
-            printf("QUEUE 2\t\t");
-            while(current->next != NULL && current->next->priority < 4){
-                current = current->next;
-            }
-        }
-        else if(prio >= 4 && prio < 8){
-            printf("QUEUE 3\t\t");
-            while(current->next != NULL && current->next->priority < 9){
-                current = current->next;
-            }
-        }
-        else if(prio >= 8){
-            printf("pwoefk\n");
-            while(current->next != NULL){
-                printf("hello\n");
-                current = current->next;
-            }
-        }
-    }
-    else
-        printf("CANVCER I ;MASIMAI\n");
-    task * temp = create(input.ID, input.deadline, input.release_time, input.period, input.priority, input.quantum, NULL);
-    task * temp2 = current->next;
-    current->next = temp;
-    temp->next = temp2;
-    printf("5\n");
-
-}
-
-task * traverseList(task * head, int prio){
-    task * current = head;
-    if(current == NULL){
-        return NULL;
-    }
-    printf("\n");
-    while(current->next != NULL && current->next->priority < prio){
-        printf("TASK: %d WITH PRIO: %d\n", current->ID, current->priority);
-        current = current->next;
-    }
-    return current;
-}
-
 task * push(task * head, task data)			//Appends a task to a list
 {
     /* go to the last node */
@@ -328,6 +277,34 @@ void OS_wakeup_n()
 	}
 }
 
+task * nodeCompare(task *task1, task *task2){
+    //compare prio of nodes, return node to run first
+    //queue_breaks: 2, 4, 8 (?)
+
+    task *taskToReturn;
+    /* printf("CHECK 1\n"); */
+    taskToReturn = task1;
+    if(task1->priority == 1){
+        if(task2->priority > 1 && task2->priority <=7 && task2->priority != 2 && task2->priority != 4){
+            taskToReturn = task2;
+        }
+    }
+    if(task1->priority == 2){
+        if(task2->priority == 1 || task2->priority == 3){
+            taskToReturn = task2;
+        }
+    }
+    /* printf("CHECK 2\n"); */
+    if(task1->priority == 4){
+        if(task2->priority <= 7 && task2->priority != 4){
+            taskToReturn = task2;
+        }
+    }
+    /* printf("Node1: %d %d\tNode2: %d %d\t Result:%d\t\n", task1->ID, task1->priority, task2->ID, task2->priority, taskToReturn->ID); */
+    return taskToReturn;
+
+}
+
 //------------------Scheduler, returns the task to be executed ------------------
 task * scheduler_n()
 {
@@ -360,20 +337,25 @@ task * scheduler_n()
 
 		if (sched_type == sched_MQ) 		//Here is where you implement your MQ scheduling algorithm,
 		{
-            //task executed_task = *ready_queue;
-            //ready_queue = pop(ready_queue);
-            //executed_task.priority++;
-            //printf("----- ++ -----");
-            task * tempHead = ready_queue;
-            while(tempHead->next != NULL){
-                tempHead = tempHead->next;
+            //save head node for comparison
+            //traverse list and compare each node_prio to saved node_prio
+            //when end of list is reached, move saved node to front
+
+            task * taskToRun;
+            taskToRun = ready_queue;
+            task * taskTemp;
+            taskTemp = ready_queue;
+            /* printf("\n"); */
+            while(taskTemp->next != NULL){
+                taskTemp = taskTemp->next;
+                taskToRun = nodeCompare(taskToRun, taskTemp);
             }
-            tempHead->priority++;
-            task localTemp = *tempHead;
-            if(ready_queue != tempHead){
-                ready_queue = remove_back(ready_queue);
-                addNode(ready_queue, localTemp);
-            }
+
+            taskToRun->priority++;
+            task taskTest = *taskToRun;
+            ready_queue = remove_node(ready_queue, taskToRun);
+            ready_queue = push(ready_queue, taskTest);
+            ready_queue = last_to_first(ready_queue);
 
 			return ready_queue;
 		}
