@@ -85,13 +85,13 @@ void printResultOfReference (int no_of_frames, frameType frames[], int pf_flag, 
 
 //----------- Finds the position in memory to evict in case of page fault and no free memory location ---------------------------------------------
 
-int findPageToEvict(frameType frames[], int n, int refs[], int counter, int no_of_references) {   // LRU eviction strategy -- This is what you are supposed to change in the lab for LFU and OP
+int findPageToEvict(frameType frames[], int n, int refs[], int refpos, int no_of_references) {   // LRU eviction strategy -- This is what you are supposed to change in the lab for LFU and OP
 
     if(ALGORITHM == 1){         //LRU
         int i, minimum = frames[0].time, pos = 0;
 
-        for(i = 0; i < n; ++i) {
-            if(frames[i].time < minimum){               // Find the page position with minimum time stamp among all frames
+        for(i = 0; i < n; ++i) {                            //loop frames
+            if(frames[i].time < minimum){                   // Find the page position with minimum time stamp among all frames
                 minimum = frames[i].time;
                 pos = i;
             }
@@ -102,8 +102,8 @@ int findPageToEvict(frameType frames[], int n, int refs[], int counter, int no_o
     else if(ALGORITHM == 2){    //FIFO
         int i, maximum = frames[0].timeSinceSwitch, pos = 0;
 
-        for(i = 0; i < n; ++i){
-            if(frames[i].timeSinceSwitch > maximum){
+        for(i = 0; i < n; ++i){                             //loop frames
+            if(frames[i].timeSinceSwitch > maximum){        //determine which page is oldest
                 maximum = frames[i].timeSinceSwitch;
                 pos = i;
             }
@@ -114,8 +114,8 @@ int findPageToEvict(frameType frames[], int n, int refs[], int counter, int no_o
     else if(ALGORITHM == 3){    //LFU
         int i, minimum = frames[0].timesUsed, pos = 0;
 
-        for(i = 1; i < n; ++i){
-            if(frames[i].timesUsed < minimum){
+        for(i = 1; i < n; ++i){                             //loop frames
+            if(frames[i].timesUsed < minimum){              //determine which frame has been used fewest times
                 minimum = frames[i].timesUsed;
                 pos = i;
             }
@@ -124,21 +124,23 @@ int findPageToEvict(frameType frames[], int n, int refs[], int counter, int no_o
     }
 
     else if(ALGORITHM == 4){    //OPT
-        int i, j, page, k, max = 0, pos = 0;
-        for(i = 0; i < n; ++i){
+        int i, j, page, count = 0, pos = 0, max = 0;
+        for(i = 0; i < n; ++i){                             //loop frames
             page = frames[i].page;
-            for(j = counter; j < no_of_references; ++j){
-                if(refs[j] == page){
-                    k = j - counter;
+            for(j = refpos+1; j < no_of_references; ++j){   //loop refs
+                if(refs[j] == page){                        //count time to next occurance
+                    count = j - refpos;
                     break;
                 }
-                k = 0;
+                if(j == no_of_references - 1){              //if no occurance was found, count is large
+                    count = no_of_references;
+                }
             }
-            if(k > max){
-                max = k;
+            if(count > max){                                //determine which frame has largest count
+                max = count;
                 pos = i;
             }
-            printf(" -%d- ", max);
+            //printf(" -%d- ", max);
         }
         return pos;
 
@@ -207,7 +209,7 @@ int main()
         }
 
         if(no_free_mem_flag == 0) {                 // Page fault and memory is full, we need to know what page to evict
-            pos = findPageToEvict(frames, no_of_frames, refs, counter, no_of_references); // Get memory position to evict among all frames
+            pos = findPageToEvict(frames, no_of_frames, refs, i, no_of_references); // Get memory position to evict among all frames
             counter++;
             faults++;
             frames[pos].page = refs[i];             // Update memory frame at position pos with referenced page
